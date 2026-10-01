@@ -46,6 +46,8 @@ COPY --from=build /app/.next ./.next
 COPY package.json next.config.ts ./
 # The business pages read their Markdown sources at run time.
 COPY content ./content
+# The schema and migrations, for hosts that apply them from this image (see railway.json).
+COPY prisma ./prisma
 # The unprivileged user writes in two places only: the cache of optimised images,
 # and the volume of private documents mounted on /data/storage.
 RUN mkdir -p .next/cache /data/storage && chown node:node .next/cache /data/storage
