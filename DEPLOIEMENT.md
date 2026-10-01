@@ -25,27 +25,24 @@ Une fois le serveur prêt, relever dans hPanel → VPS → Vue d’ensemble :
 Si vous activez le pare-feu de Hostinger (hPanel → VPS → Sécurité → Pare-feu), autorisez les
 ports TCP 22, 80 et 443, et UDP 443.
 
-## 2. Envoyer le projet sur le serveur
+## 2. Récupérer le projet sur le serveur
 
-Sur votre Mac, dans le Terminal :
-
-```sh
-cd ~/Desktop/Monsinistre
-rsync -az --delete \
-  --exclude node_modules --exclude .next --exclude .env --exclude storage \
-  --exclude backups --exclude test-results --exclude graphify-out --exclude .DS_Store \
-  ./ root@ADRESSE_IP:/opt/monsinistre/
-```
-
-À la première connexion, répondre `yes` à la question sur l’empreinte, puis saisir le mot de
-passe root. Votre fichier `.env` local (développement) n’est pas envoyé.
-
-## 3. Configurer
-
-Se connecter au serveur et créer la configuration de production :
+Se connecter au serveur depuis le Terminal de votre Mac, puis copier le projet depuis GitHub :
 
 ```sh
 ssh root@ADRESSE_IP
+git clone https://github.com/phonedelta/Monsinistre.git /opt/monsinistre
+```
+
+À la première connexion, répondre `yes` à la question sur l’empreinte, puis saisir le mot de
+passe root. Le dépôt étant public, aucun identifiant GitHub n’est demandé. S’il devient privé,
+il faudra autoriser le serveur à le lire (clé de déploiement GitHub).
+
+## 3. Configurer
+
+Toujours sur le serveur, créer la configuration de production :
+
+```sh
 cd /opt/monsinistre
 cp .env.production.example .env
 sed -i "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=$(openssl rand -hex 24)/" .env
@@ -128,10 +125,11 @@ www.{$DOMAIN} {
 
 ## 7. Mettre à jour le site
 
-Depuis le Mac, renvoyer le projet avec la commande `rsync` de l’étape 2, puis sur le serveur :
+Une fois les changements poussés sur GitHub, sur le serveur :
 
 ```sh
 cd /opt/monsinistre
+git pull
 docker compose -f compose.prod.yaml up -d --build
 ```
 
@@ -193,6 +191,7 @@ Ne jamais ajouter `-v` à `down` : cette option supprime la base et les document
 
 | Symptôme | À vérifier |
 | --- | --- |
+| `git: command not found` à l’étape 2 | Installer git : `apt update && apt install -y git`. |
 | Le site ne répond pas | `docker compose -f compose.prod.yaml ps` ; les ports 80 et 443 dans le pare-feu ; `ping VOTRE_DOMAIN` doit donner l’adresse IP du VPS. |
 | Avertissement de certificat | `docker compose -f compose.prod.yaml logs caddy`. Le nom indiqué dans `DOMAIN` doit pointer vers le serveur. |
 | « Origine invalide » à l’envoi d’un document | `DOMAIN` ne correspond pas à l’adresse utilisée dans le navigateur. |
