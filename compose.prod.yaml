@@ -1,0 +1,129 @@
+# Production stack of Monsinistre on one server: reverse proxy with automatic HTTPS,
+# application, PostgreSQL. Values come from the .env file next to this file
+# (see .env.production.example and DEPLOIEMENT.md).
+#
+#   docker compose -f compose.prod.yaml up -d --build
+#
+# compose.yaml (without "prod") is the development database only.
+
+# A fixed name keeps the volumes of production apart from those of development.
+name: monsinistre-prod
+
+x-database-url: &database-url 'postgresql://monsinistre:${POSTGRES_PASSWORD:?Renseigner POSTGRES_PASSWORD dans .env}@db:5432/monsinistre'
+# Container logs are rotated so they never fill the disk.
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: '3'
+
+services:
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    logging: *logging
+    ports:
+      - '${HTTP_PORT:-80}:80'
+      - '${HTTPS_PORT:-443}:443'
+      - '${HTTPS_PORT:-443}:443/udp'
+    environment:
+      DOMAIN: ${DOMAIN:?Renseigner DOMAIN dans .env}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - app
+
+  app:
+    build:
+      context: .
+      target: app
+      args:
+        CONTACT_PHONE: ${CONTACT_PHONE:-}
+        CONTACT_WHATSAPP: ${CONTACT_WHATSAPP:-}
+        CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      DATABASE_URL: *database-url
+      APP_URL: ${APP_URL:-https://${DOMAIN}}
+      STORAGE_DIR: /data/storage/private
+      # The application port is not published: every request comes through Caddy,
+      # which discards any X-Forwarded-For sent by the client and sets the real address.
+      TRUST_PROXY: 'true'
+      CONTACT_PHONE: ${CONTACT_PHONE:-}
+      CONTACT_WHATSAPP: ${CONTACT_WHATSAPP:-}
+      CONTACT_EMAIL: ${CONTACT_EMAIL:-}
+    volumes:
+      - storage:/data/storage
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/connexion').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # Applies the pending database migrations, then stops. The application waits for it.
+  migrate:
+    build:
+      context: .
+      target: tools
+    restart: 'no'
+    environment:
+      DATABASE_URL: *database-url
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # One-off commands, never started by "up":
+  #   docker compose -f compose.prod.yaml run --rm tools npm run db:seed
+  tools:
+    build:
+      context: .
+      target: tools
+    profiles: ['tools']
+    environment:
+      DATABASE_URL: *database-url
+      ADMIN_PHONE: ${ADMIN_PHONE:-}
+      ADMIN_NAME: ${ADMIN_NAME:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      STAFF_PHONE: ${STAFF_PHONE:-}
+      STAFF_NAME: ${STAFF_NAME:-}
+      STAFF_PASSWORD: ${STAFF_PASSWORD:-}
+      STAFF_ROLE: ${STAFF_ROLE:-}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_USER: monsinistre
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Renseigner POSTGRES_PASSWORD dans .env}
+      POSTGRES_DB: monsinistre
+    # No published port: the database is reachable from this stack only.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U monsinistre']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+  storage:
+  caddy_data:
+  caddy_config:

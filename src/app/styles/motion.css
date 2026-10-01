@@ -1,0 +1,176 @@
+/* Motion: entrances, loops and page transitions.
+   Every element's own style is its final state; keyframes only describe where it comes from.
+   With reduced motion the animations are removed and nothing stays hidden. */
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    translate: 0.75rem 0;
+  }
+}
+@keyframes grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes float-y {
+  to {
+    translate: 0 -0.5rem;
+  }
+}
+@keyframes pulse-ring {
+  from {
+    opacity: 0.55;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+@keyframes pulse-dot {
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes draw-line {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes loading-slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(250%);
+  }
+}
+@keyframes drift {
+  to {
+    translate: 3% -4%;
+    scale: 1.08;
+  }
+}
+
+/* Entrances on scroll (see components/reveal.tsx). An element waits hidden only once
+   the script has found it below the fold, so the page stays readable without JavaScript. */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal.is-pending:not(.reveal-stagger),
+  .reveal-stagger.is-pending > * {
+    opacity: 0;
+  }
+  .reveal.is-shown:not(.reveal-stagger),
+  .reveal-stagger.is-shown > * {
+    animation: rise var(--duration-reveal) var(--ease-out) backwards;
+  }
+  .reveal-stagger.is-shown > :nth-child(2) {
+    animation-delay: calc(var(--stagger) * 1);
+  }
+  .reveal-stagger.is-shown > :nth-child(3) {
+    animation-delay: calc(var(--stagger) * 2);
+  }
+  .reveal-stagger.is-shown > :nth-child(4) {
+    animation-delay: calc(var(--stagger) * 3);
+  }
+  .reveal-stagger.is-shown > :nth-child(5) {
+    animation-delay: calc(var(--stagger) * 4);
+  }
+  .reveal-stagger.is-shown > :nth-child(6) {
+    animation-delay: calc(var(--stagger) * 5);
+  }
+  .reveal-stagger.is-shown > :nth-child(n + 7) {
+    animation-delay: calc(var(--stagger) * 6);
+  }
+}
+
+/* Entrance of a page's first screen: its direct children follow each other. */
+.enter > * {
+  animation: rise var(--duration-reveal) var(--ease-out) backwards;
+}
+.enter > :nth-child(2) {
+  animation-delay: calc(var(--stagger) * 1);
+}
+.enter > :nth-child(3) {
+  animation-delay: calc(var(--stagger) * 2);
+}
+.enter > :nth-child(4) {
+  animation-delay: calc(var(--stagger) * 3);
+}
+.enter > :nth-child(5) {
+  animation-delay: calc(var(--stagger) * 4);
+}
+.enter > :nth-child(n + 6) {
+  animation-delay: calc(var(--stagger) * 5);
+}
+
+/* Page transitions (see app/(public)/template.tsx). The header stays in place. */
+::view-transition {
+  pointer-events: none;
+}
+::view-transition-old(.page) {
+  animation: var(--duration-fast) var(--ease-in-out) both page-out;
+}
+::view-transition-new(.page) {
+  animation: var(--duration-slow) var(--ease-out) 60ms both page-in;
+}
+@keyframes page-out {
+  to {
+    opacity: 0;
+    translate: 0 -0.5rem;
+  }
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: 0 1rem;
+  }
+}
+::view-transition-group(site-header) {
+  animation: none;
+  z-index: 100;
+}
+::view-transition-old(site-header) {
+  display: none;
+}
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+  }
+}

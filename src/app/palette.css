@@ -1,0 +1,47 @@
+/* Monsinistre — unique source of brand colors, shared by CSS and Tailwind. */
+:root {
+  --primary: #2bb3b1;
+  --navy: #102d46;
+  --surface: #ffffff;
+  --background: #f5f8f9;
+  --text: #1c2935;
+  --text-muted: #687780;
+  --border: #e1eaec;
+  --primary-soft: #e8f7f6;
+
+  /* Derived tones use only the eight brand colors. Dark text on turquoise
+     buttons and a deeper turquoise for small links preserve legibility. */
+  --primary-text: color-mix(in srgb, var(--primary) 55%, var(--navy)); /* links, small accents */
+  --primary-strong: color-mix(in srgb, var(--primary) 80%, var(--navy)); /* large accent text */
+  --primary-hover: color-mix(in srgb, var(--primary) 85%, var(--surface));
+  --primary-tint: color-mix(in srgb, var(--primary-soft) 55%, var(--surface)); /* hover wash */
+  --primary-glow: color-mix(in srgb, var(--primary) 30%, transparent);
+  --ring: color-mix(in srgb, var(--primary) 26%, transparent); /* focus halo */
+  --border-strong: color-mix(in srgb, var(--text-muted) 38%, var(--border)); /* field outlines */
+  --surface-glass: color-mix(in srgb, var(--surface) 82%, transparent); /* sticky bars */
+  --on-dark: var(--surface);
+  --on-dark-muted: color-mix(in srgb, var(--surface) 76%, var(--primary));
+  --border-dark: color-mix(in srgb, var(--surface) 16%, transparent);
+  --hover-dark: color-mix(in srgb, var(--primary) 16%, transparent);
+  --navy-raised: color-mix(in srgb, var(--navy) 90%, var(--primary)); /* surfaces on navy */
+  --line: color-mix(in srgb, var(--navy) 82%, transparent); /* illustration strokes */
+  --line-soft: color-mix(in srgb, var(--navy) 26%, transparent);
+  --heading-color: var(--navy);
+}
+
+/* Remove unrelated default color utilities; expose this identity to Tailwind. */
+@theme inline {
+  --color-*: initial;
+  --color-primary: var(--primary);
+  --color-navy: var(--navy);
+  --color-white: var(--surface);
+  --color-surface: var(--surface);
+  --color-background: var(--background);
+  --color-foreground: var(--text);
+  --color-muted: var(--text-muted);
+  --color-border: var(--border);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-text: var(--primary-text);
+  --color-transparent: transparent;
+  --color-current: currentColor;
+}

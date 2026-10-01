@@ -1,0 +1,17 @@
+# Never send secrets, local data or build output to the image.
+.env*
+node_modules
+.next
+storage
+backups
+test-results
+playwright-report
+graphify-out
+tests
+*.tsbuildinfo
+.git
+.DS_Store
+Dockerfile
+compose*.yaml
+deploy
+*.md

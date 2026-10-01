@@ -1,0 +1,14 @@
+# Reverse proxy of the production stack. Caddy obtains and renews the HTTPS certificate
+# of {$DOMAIN} by itself and redirects HTTP to HTTPS.
+{$DOMAIN} {
+	encode zstd gzip
+
+	# Uploads are limited to 20 MB by the application; refuse larger bodies before they reach it.
+	request_body {
+		max_size 25MB
+	}
+
+	header Strict-Transport-Security "max-age=31536000"
+
+	reverse_proxy app:3000
+}

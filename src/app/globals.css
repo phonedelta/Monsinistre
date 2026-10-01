@@ -1,0 +1,10 @@
+/* Monsinistre — entry point of the styles. Order matters: tokens first, then elements,
+   shared components, the two areas of the platform, and motion last. */
+@import 'tailwindcss';
+@import './palette.css';
+@import './tokens.css';
+@import './styles/base.css';
+@import './styles/components.css';
+@import './styles/public.css';
+@import './styles/portal.css';
+@import './styles/motion.css';

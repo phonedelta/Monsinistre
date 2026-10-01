@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CLIENT
+  ADMIN
+  EXPERT
+}
+
+enum DossierType {
+  INCENDIE_HABITATION
+  INCENDIE_COMMERCE
+  EXPERTISE_PREALABLE
+  AUTRE_INCENDIE
+}
+
+enum DossierStatus {
+  NOUVEAU
+  A_VERIFIER
+  DOCUMENTS_REQUIS
+  DOSSIER_COMPLET
+  ANALYSE_EN_COURS
+  RDV_A_PLANIFIER
+  EXPERTISE_PLANIFIEE
+  EXPERTISE_EN_COURS
+  RAPPORT_EN_PREPARATION
+  TERMINE
+  ANNULE
+  ARCHIVE
+}
+
+enum ContactStatus {
+  NOUVEAU
+  CONTACTE
+  EN_COURS
+  CONVERTI
+  FERME
+}
+
+model User {
+  id           String                 @id @default(cuid())
+  fullName     String
+  phone        String                 @unique
+  email        String?
+  city         String
+  passwordHash String
+  role         Role                   @default(CLIENT)
+  createdAt    DateTime               @default(now())
+  updatedAt    DateTime               @updatedAt
+  sessions     Session[]
+  dossiers     Dossier[]              @relation("Client")
+  assignments  Dossier[]              @relation("Assignee")
+  messages     DossierMessage[]
+  documents    DossierDocument[]
+  notes        DossierNote[]
+  history      DossierStatusHistory[]
+  audits       AuditLog[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("sessions")
+}
+
+model Dossier {
+  id            String                 @id @default(cuid())
+  sequence      Int                    @unique @default(autoincrement())
+  reference     String                 @unique
+  submissionKey String                 @unique
+  userId        String
+  user          User                   @relation("Client", fields: [userId], references: [id])
+  type          DossierType
+  status        DossierStatus          @default(NOUVEAU)
+  city          String
+  businessName  String?
+  assignedTo    String?
+  assignee      User?                  @relation("Assignee", fields: [assignedTo], references: [id])
+  formData      Json                   @db.JsonB
+  reviewFlags   String[]
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  closedAt      DateTime?
+  history       DossierStatusHistory[]
+  messages      DossierMessage[]
+  documents     DossierDocument[]
+  notes         DossierNote[]
+  requests      DocumentRequest[]
+  audits        AuditLog[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([type])
+  @@index([city])
+  @@index([createdAt])
+  @@index([assignedTo])
+  @@map("dossiers")
+}
+
+model DossierStatusHistory {
+  id        String         @id @default(cuid())
+  dossierId String
+  dossier   Dossier        @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  oldStatus DossierStatus?
+  newStatus DossierStatus
+  authorId  String
+  author    User           @relation(fields: [authorId], references: [id])
+  comment   String?
+  createdAt DateTime       @default(now())
+
+  @@index([dossierId, createdAt])
+  @@map("dossier_status_history")
+}
+
+model DossierMessage {
+  id        String   @id @default(cuid())
+  dossierId String
+  dossier   Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([dossierId, createdAt])
+  @@map("dossier_messages")
+}
+
+model DossierDocument {
+  id         String   @id @default(cuid())
+  dossierId  String
+  dossier    Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
+  name       String
+  storageKey String   @unique
+  mime       String
+  size       Int
+  category   String
+  createdAt  DateTime @default(now())
+
+  @@index([dossierId])
+  @@map("dossier_documents")
+}
+
+model DocumentRequest {
+  id          String    @id @default(cuid())
+  dossierId   String
+  dossier     Dossier   @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  label       String
+  fulfilledAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([dossierId])
+  @@map("document_requests")
+}
+
+model DossierNote {
+  id        String   @id @default(cuid())
+  dossierId String
+  dossier   Dossier  @relation(fields: [dossierId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([dossierId])
+  @@map("dossier_notes")
+}
+
+model ContactRequest {
+  id          String        @id @default(cuid())
+  fullName    String
+  phone       String
+  email       String?
+  city        String
+  service     String
+  description String
+  status      ContactStatus @default(NOUVEAU)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([status, createdAt])
+  @@map("contact_requests")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String
+  actor     User     @relation(fields: [actorId], references: [id])
+  dossierId String?
+  dossier   Dossier? @relation(fields: [dossierId], references: [id], onDelete: SetNull)
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+
+  @@index([dossierId, createdAt])
+  @@map("audit_logs")
+}
+
+model RateLimit {
+  key       String   @id
+  count     Int
+  expiresAt DateTime
+
+  @@index([expiresAt])
+  @@map("rate_limits")
+}
+
+model PasswordReset {
+  id        String    @id @default(cuid())
+  phone     String
+  tokenHash String?   @unique
+  expiresAt DateTime?
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([phone])
+  @@map("password_resets")
+}
