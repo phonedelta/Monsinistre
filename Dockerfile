@@ -35,7 +35,8 @@ RUN npm run build && rm -rf .next/cache
 
 FROM base AS prod-deps
 COPY package.json package-lock.json ./
-RUN npm ci --omit=dev
+# The Prisma CLI is kept so the image can apply migrations itself (RUN_MIGRATIONS below).
+RUN npm ci --omit=dev && npm install --no-save --no-package-lock prisma@6.19.3
 
 FROM base AS app
 ENV NODE_ENV=production
@@ -46,7 +47,7 @@ COPY --from=build /app/.next ./.next
 COPY package.json next.config.ts ./
 # The business pages read their Markdown sources at run time.
 COPY content ./content
-# The schema and migrations, for hosts that apply them from this image (see railway.json).
+# The schema and migrations, for hosts that apply them from this image.
 COPY prisma ./prisma
 # The unprivileged user writes in two places only: the cache of optimised images,
 # and the volume of private documents mounted on /data/storage.
@@ -54,4 +55,6 @@ RUN mkdir -p .next/cache /data/storage && chown node:node .next/cache /data/stor
 USER node
 EXPOSE 3000
 # Listen on every interface of the container: only the reverse proxy can reach it.
-CMD ["node_modules/.bin/next", "start", "--hostname", "0.0.0.0", "--port", "3000"]
+# With RUN_MIGRATIONS=true (hosts without a separate migration step, such as Railway),
+# pending migrations are applied first and a failure stops the start.
+CMD ["sh", "-c", "if [ \"$RUN_MIGRATIONS\" = \"true\" ]; then node_modules/.bin/prisma migrate deploy || exit 1; fi; exec node_modules/.bin/next start --hostname 0.0.0.0 --port ${PORT:-3000}"]
