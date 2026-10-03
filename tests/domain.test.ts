@@ -183,11 +183,11 @@ test('un identifiant d’équipe ne se confond jamais avec un téléphone', () =
 test('le premier administrateur ne se crée qu’à partir de variables complètes', async () => {
   // Nothing configured: nothing to do, as on a developer's machine.
   assert.equal(await ensureFirstAdmin({}), 'not configured');
-  // Configured by halves, or with a short password: refused before the database is read.
+  // Without a phone, or with a short password: refused before the database is read.
   for (const env of [
     { ADMIN_USERNAME: 'Monsinistre' },
+    { ADMIN_NAME: 'Administrateur', ADMIN_PASSWORD: 'un-mot-de-passe-long' },
     { ADMIN_PHONE: '0612345678', ADMIN_NAME: 'Administrateur', ADMIN_PASSWORD: 'court' },
-    { ADMIN_PHONE: '0612345678', ADMIN_PASSWORD: 'un-mot-de-passe-long' },
   ])
     await assert.rejects(ensureFirstAdmin(env), /ADMIN_PHONE, ADMIN_NAME et ADMIN_PASSWORD/);
 });
