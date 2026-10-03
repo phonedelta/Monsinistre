@@ -23,6 +23,8 @@ npm run dev
 
 Le seed nécessite `ADMIN_PHONE`, `ADMIN_NAME` et `ADMIN_PASSWORD` (12 caractères minimum, 72 octets maximum). `ADMIN_USERNAME`, facultatif, donne à l’administrateur un identifiant de connexion à la place du téléphone. Le seed ne modifie jamais un compte déjà présent et refuse de transformer un client en administrateur.
 
+Le serveur fait la même chose à chaque démarrage (`src/instrumentation.ts`, `src/lib/first-admin.ts`) : si ces variables sont définies et qu’aucun compte n’a ce téléphone, il crée l’administrateur. Un hébergeur où personne ne lance le seed, comme Railway, n’a donc qu’à recevoir ces variables. Un compte existant n’est jamais modifié : un mot de passe changé ensuite dans l’administration reste valable. Une variable incomplète ou invalide est signalée dans les journaux, sans empêcher le site de démarrer.
+
 Pour l’instance locale préparée pendant la réalisation : PostgreSQL utilise **55438**, l’application **http://127.0.0.1:3018**. Lancer `npm run dev -- --port 3018` et conserver la même origine dans `APP_URL`. `.env` contient déjà le mot de passe aléatoire de cette base de développement. Le premier administrateur doit être renseigné par l’exploitant ; les comptes QA des tests sont supprimés après vérification.
 
 ## Parcours
@@ -117,6 +119,8 @@ Les tests Playwright nécessitent une application démarrée à `APP_URL` avec l
 Couverture : normalisation des téléphones, validation métier, limites bcrypt, trois formulaires, compte existant, historique réel, changement de statut visible côté client, messages, fichiers valides/invalides, isolation des clients, restrictions expert, recherche serveur, contact, réinitialisation, responsive 390/768/1366/1920 px.
 
 ## Déploiement
+
+Sur Railway, le site est reconstruit à chaque envoi sur `main` ; les migrations sont appliquées au démarrage (`RUN_MIGRATIONS=true`). Variables du service de l’application : `DATABASE_URL` (référence au service PostgreSQL), `APP_URL` (l’adresse publique, en https), `RUN_MIGRATIONS=true`, `STORAGE_DIR` (le volume des documents), `TRUST_PROXY=true` pour compter les tentatives par visiteur et non pour tous à la fois, et `ADMIN_USERNAME`, `ADMIN_PHONE`, `ADMIN_NAME`, `ADMIN_PASSWORD` pour le premier administrateur, créé au démarrage suivant.
 
 `DEPLOIEMENT.md` décrit la mise en ligne sur un VPS avec Docker. `compose.prod.yaml` lance le proxy HTTPS (Caddy), l’application et PostgreSQL, applique les migrations au démarrage et conserve la base et les documents sur des volumes. La configuration de production part de `.env.production.example`.
 

@@ -19,6 +19,7 @@ import {
 } from '../src/lib/constants';
 import { sameOrigin } from '../src/lib/origin';
 import { byteRange } from '../src/lib/storage';
+import { ensureFirstAdmin } from '../src/lib/first-admin';
 test('les variantes marocaines partagent un identifiant unique', () => {
   for (const phone of [
     '0612345678',
@@ -178,6 +179,17 @@ test('un identifiant d’équipe ne se confond jamais avec un téléphone', () =
     assert.equal(usernameSchema.safeParse(value).success, false);
   // Neither a username nor a valid number: refused before any lookup.
   for (const value of ['mons_nistre', '1234', '']) assert.throws(() => loginIdentifier(value));
+});
+test('le premier administrateur ne se crée qu’à partir de variables complètes', async () => {
+  // Nothing configured: nothing to do, as on a developer's machine.
+  assert.equal(await ensureFirstAdmin({}), 'not configured');
+  // Configured by halves, or with a short password: refused before the database is read.
+  for (const env of [
+    { ADMIN_USERNAME: 'Monsinistre' },
+    { ADMIN_PHONE: '0612345678', ADMIN_NAME: 'Administrateur', ADMIN_PASSWORD: 'court' },
+    { ADMIN_PHONE: '0612345678', ADMIN_PASSWORD: 'un-mot-de-passe-long' },
+  ])
+    await assert.rejects(ensureFirstAdmin(env), /ADMIN_PHONE, ADMIN_NAME et ADMIN_PASSWORD/);
 });
 test('aucun mot de passe ne dépasse la limite bcrypt', () => {
   assert.equal(passwordSchema.safeParse('a'.repeat(12)).success, true);
