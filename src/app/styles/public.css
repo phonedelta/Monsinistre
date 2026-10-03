@@ -182,33 +182,41 @@
   margin: var(--space-6) 0 0;
   font-size: var(--text-lead);
 }
-.pill {
-  display: inline-flex;
+/* What the page is about, said plainly above its title: no pill, no dot, no capitals. */
+.hero-kicker {
+  margin: 0 0 var(--space-5);
+  color: var(--primary-text);
+  font-size: var(--text-md);
+  font-weight: var(--font-weight-medium);
+}
+/* On a service page, the way back to the list of services */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
-  margin-bottom: var(--space-6);
-  padding: var(--space-1-5) var(--space-3);
-  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
-  border-radius: var(--radius-pill);
-  background: var(--surface);
-  box-shadow: var(--shadow-xs);
-  color: var(--primary-text);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  margin-bottom: var(--space-5);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
 }
-.pill .small-dot {
-  position: relative;
-  margin: 0;
+.breadcrumb a {
+  color: var(--text-muted);
+  transition: color var(--duration-base) var(--ease-out);
 }
-.pill .small-dot::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: var(--primary);
-  animation: pulse-ring 2.4s var(--ease-out) infinite;
+.breadcrumb a:hover {
+  color: var(--navy);
+}
+.breadcrumb [aria-current] {
+  color: var(--navy);
+  font-weight: var(--font-weight-medium);
+}
+/* What a card is for, in plain words above its title */
+.card-tag {
+  display: block;
+  margin-bottom: var(--space-1-5);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
 }
 .hero-actions {
   display: flex;
@@ -358,11 +366,6 @@
   animation: pulse-ring 2.6s var(--ease-out) infinite;
   animation-delay: calc(var(--i, 0) * 500ms + 2200ms);
   opacity: 0;
-}
-.visual-tag b {
-  color: var(--primary-text);
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
 }
 .visual-note,
 .visual-card {
@@ -545,14 +548,11 @@
 .path-card.soft::before {
   background: radial-gradient(closest-side, var(--surface), transparent);
 }
-.path-number {
+.path-card .card-tag {
   margin-bottom: var(--space-5);
   color: var(--primary-text);
-  font-size: var(--text-xs);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: var(--tracking-wide);
 }
-.path-card.dark .path-number {
+.path-card.dark .card-tag {
   color: var(--primary);
 }
 .path-card h2 {
@@ -602,33 +602,16 @@
 .path-card:hover .path-arrow svg {
   transform: translate(2px, -2px);
 }
-.reassurance {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
-  gap: var(--space-4);
-  margin-top: var(--space-5);
-}
-.reassurance > div {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3-5) var(--space-5);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  background: var(--surface);
-  color: var(--navy);
-  font-size: var(--text-md);
-  font-weight: var(--font-weight-medium);
-}
-.reassurance svg {
-  color: var(--primary-text);
-}
 
 /* Service cards */
 .service-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: var(--space-5);
+}
+/* Two cards share the width between them. */
+.service-grid.pair {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .service-card {
   display: flex;
@@ -665,15 +648,6 @@
   background: var(--primary);
   color: var(--navy);
   rotate: -6deg;
-}
-.service-card .card-top > span:last-child {
-  color: var(--text-muted);
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
-}
-.service-card .eyebrow {
-  margin-bottom: var(--space-2);
-  font-size: var(--text-2xs);
 }
 .service-card h3 {
   font-size: var(--text-xl);
@@ -844,6 +818,11 @@
 .final-cta .eyebrow {
   color: var(--primary);
 }
+/* The text keeps its button beside it, however long the sentence of the page. */
+.final-cta > div {
+  flex: 1 1 22rem;
+  max-width: 40rem;
+}
 .final-cta p {
   margin: var(--space-4) 0 0;
   color: var(--on-dark-muted);
@@ -905,10 +884,14 @@
   color: var(--on-dark-muted);
   font-size: var(--text-sm);
 }
-.footer-bottom > span:last-child {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
+/* Who designed and built the site, their name a link to their own site */
+.footer-bottom a {
+  color: var(--on-dark);
+  font-weight: var(--font-weight-semibold);
+  transition: color var(--duration-base) var(--ease-out);
+}
+.footer-bottom a:hover {
+  color: var(--primary);
 }
 
 /* Service pages: first screen */
@@ -942,20 +925,6 @@
 .editorial-head {
   position: sticky;
   top: calc(var(--header-height) + var(--space-8));
-}
-.editorial-number {
-  display: inline-grid;
-  place-items: center;
-  min-width: 2.75rem;
-  height: 2rem;
-  margin-bottom: var(--space-5);
-  padding-inline: var(--space-3);
-  border-radius: var(--radius-pill);
-  background: var(--primary-soft);
-  color: var(--primary-text);
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
 }
 .editorial-head .prose p {
   font-size: var(--text-lead);
@@ -1029,14 +998,6 @@
 .feature p {
   margin: var(--space-2) 0 0;
   font-size: var(--text-md);
-}
-.feature-index {
-  display: block;
-  margin-bottom: var(--space-3);
-  color: var(--primary);
-  font-size: var(--text-sm);
-  font-weight: var(--font-weight-semibold);
-  font-variant-numeric: tabular-nums;
 }
 /* Numbered items, linked by a line */
 .step-list {
@@ -1231,10 +1192,6 @@
 .statement.dark .prose p {
   color: var(--on-dark-muted);
 }
-.statement.dark .editorial-number {
-  background: var(--hover-dark);
-  color: var(--primary);
-}
 
 /* Long-form text */
 .prose h2 {
@@ -1408,7 +1365,6 @@
   flex-direction: column;
   align-items: center;
   gap: var(--space-5);
-  margin-block: var(--section-y);
   text-align: center;
   animation: pop-in var(--duration-reveal) var(--ease-out) backwards;
 }
@@ -1418,8 +1374,16 @@
 .success-screen > .eyebrow {
   margin: 0;
 }
+.success-screen > p {
+  max-width: 34rem;
+  margin: 0;
+  font-size: var(--text-lead);
+}
 .success-screen > .panel {
   width: 100%;
+  margin-top: var(--space-4);
+  background: var(--background);
+  box-shadow: none;
   text-align: left;
 }
 
@@ -1491,6 +1455,15 @@
   align-items: center;
 }
 
+/* Forgotten and new password: one card, centred on the band */
+.account-band {
+  padding-block: var(--section-y);
+}
+.account-band .auth-panel {
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
 /* Contact */
 .contact-layout {
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -1505,31 +1478,6 @@
 }
 .contact-layout aside > p {
   max-width: 26rem;
-}
-.contact-steps {
-  display: grid;
-  gap: var(--space-4);
-  margin: var(--space-7) 0;
-  padding: 0;
-  list-style: none;
-}
-.contact-steps li {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  color: var(--navy);
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-medium);
-}
-.contact-steps span {
-  display: grid;
-  place-items: center;
-  flex-shrink: 0;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: var(--radius-md);
-  background: var(--primary-soft);
-  color: var(--primary-text);
 }
 .contact-links {
   display: grid;
@@ -1601,20 +1549,127 @@
   margin: var(--space-4) 0 var(--space-8);
   font-size: var(--text-lead);
 }
-.status-card .loading-bar {
-  width: 10rem;
-  margin: 0 0 var(--space-6);
-  background: var(--primary-soft);
+/* The illustration on navy: light strokes on a dark sheet (team pages) */
+.visual-dark {
+  --line: color-mix(in srgb, var(--surface) 78%, transparent);
+  --line-soft: color-mix(in srgb, var(--surface) 26%, transparent);
+  --primary-strong: var(--primary);
+}
+.visual-dark .bp-fill {
+  fill: var(--navy-raised);
+}
+.visual-dark .bp-tint {
+  fill: color-mix(in srgb, var(--primary) 20%, var(--navy));
+}
+.visual-dark .bp-ink {
+  fill: var(--primary);
+}
+.visual-dark .visual-stage {
+  border-color: var(--border-dark);
+  background:
+    radial-gradient(90% 80% at 100% 0%, var(--primary-glow), transparent 62%),
+    color-mix(in srgb, var(--navy) 94%, var(--surface));
+  box-shadow: none;
+}
+/* The team sign-in page: the illustration on navy beside the form */
+.staff-page {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  min-height: 100dvh;
+}
+.staff-aside {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  padding: clamp(var(--space-6), 4vw, var(--space-12));
+  background:
+    radial-gradient(40rem 28rem at 0% 100%, var(--hover-dark), transparent 70%), var(--navy);
+  color: var(--on-dark-muted);
   overflow: hidden;
 }
-.status-card .loading-bar::after {
-  content: '';
-  display: block;
-  width: 40%;
-  height: 100%;
-  border-radius: inherit;
-  background: var(--primary);
-  animation: loading-slide 1.2s var(--ease-in-out) infinite;
+.staff-aside > .logo {
+  align-self: flex-start;
+}
+.staff-pitch {
+  display: grid;
+  gap: var(--space-6);
+  width: min(34rem, 100%);
+  margin: auto;
+}
+.staff-pitch .eyebrow {
+  color: var(--primary);
+}
+.staff-title {
+  margin: 0;
+  color: var(--on-dark);
+  font-size: var(--text-h2);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+}
+.staff-title em {
+  color: var(--primary);
+  font-style: normal;
+}
+.staff-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+.staff-points li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.staff-points svg {
+  color: var(--primary);
+}
+.staff-form {
+  display: grid;
+  place-items: center;
+  padding: var(--space-12) var(--container-gutter);
+  background:
+    radial-gradient(40rem 26rem at 50% 0%, var(--primary-soft), transparent 70%), var(--background);
+}
+.staff-login {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-8);
+  width: min(28rem, 100%);
+}
+/* The logo is already on the navy side; it comes back above the card when that side is gone. */
+.staff-login > .logo {
+  display: none;
+}
+.staff-login .auth-panel {
+  width: 100%;
+  text-align: left;
+}
+@media (max-width: 960px) {
+  .staff-page {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .staff-aside {
+    display: none;
+  }
+  .staff-login > .logo {
+    display: block;
+  }
+}
+/* Inside the public layout, the loader keeps the footer below the first screen. */
+.page-loading {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  min-height: 70vh;
+  color: var(--text-muted);
+  font-size: var(--text-md);
 }
 
 @media (max-width: 1100px) {
@@ -1737,10 +1792,25 @@
   .nav-cta .lucide-arrow-up-right {
     display: none;
   }
-  .service-grid {
+  .service-grid,
+  .service-grid.pair {
     grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
   }
-  .hero-actions .btn {
+  .service-card {
+    padding: var(--space-5);
+  }
+  .service-card .card-top {
+    margin-bottom: var(--space-4);
+  }
+  .service-card p {
+    margin-bottom: var(--space-5);
+  }
+  .section-row .section-heading {
+    margin-bottom: var(--space-3);
+  }
+  .hero-actions .btn,
+  .landing-hero .btn {
     width: 100%;
   }
   .visual-note,

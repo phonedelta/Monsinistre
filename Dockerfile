@@ -25,11 +25,6 @@ CMD ["npm", "run", "db:migrate"]
 
 FROM deps AS build
 COPY . .
-# The contact page is prerendered: its public contact details are read at build time.
-ARG CONTACT_PHONE=
-ARG CONTACT_WHATSAPP=
-ARG CONTACT_EMAIL=
-ENV CONTACT_PHONE=$CONTACT_PHONE CONTACT_WHATSAPP=$CONTACT_WHATSAPP CONTACT_EMAIL=$CONTACT_EMAIL
 # The build cache is of no use at run time.
 RUN npm run build && rm -rf .next/cache
 

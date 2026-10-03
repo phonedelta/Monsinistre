@@ -1,11 +1,12 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
+import { fr } from './typography';
 export const landings = {
   'incendie-habitation': {
     file: 'Landing Page — Accompagnement Incendie Habitation.md',
     type: 'INCENDIE_HABITATION',
     visual: 'habitation',
-    eyebrow: 'INCENDIE HABITATION',
+    name: 'Incendie habitation',
     title: 'Votre habitation a subi un incendie ? Ne gérez pas seul votre dossier d’assurance.',
     intro:
       'Si votre logement est assuré et que votre dossier est toujours en cours, Monsinistre vous accompagne dans l’évaluation des dommages et la défense de votre indemnisation.',
@@ -16,7 +17,7 @@ export const landings = {
     file: 'Landing Page — Accompagnement Incendie Magasins _ Monsinistre.md',
     type: 'INCENDIE_COMMERCE',
     visual: 'commerce',
-    eyebrow: 'MAGASINS & LOCAUX COMMERCIAUX',
+    name: 'Incendie commerce',
     title: 'Votre magasin a subi un incendie ?',
     intro:
       'Si votre local est assuré et que votre dossier est toujours en cours, Monsinistre évalue vos dommages, documente vos pertes et vous accompagne dans le traitement technique du dossier avec votre assurance.',
@@ -27,10 +28,10 @@ export const landings = {
     file: 'Landing Page — Expertise Préalable _ Monsinistre.md',
     type: 'EXPERTISE_PREALABLE',
     visual: 'prealable',
-    eyebrow: 'EXPERTISE PRÉALABLE',
+    name: 'Expertise préalable',
     title: 'Avant d’assurer vos biens de valeur, connaissez leur valeur réelle.',
     intro:
-      'Bijoux, tableaux, œuvres d’art et objets de valeur : faites réaliser une expertise préalable pour identifier, évaluer et documenter vos biens avant de souscrire votre assurance.',
+      'Bijoux, montres, tableaux, œuvres d’art : faites établir leur valeur par un expert avant de souscrire votre assurance.',
     cta: 'Demander mon expertise préalable',
     final: 10,
   },
@@ -135,6 +136,6 @@ export async function readEditorial(slug: keyof typeof landings): Promise<Editor
         .replace(/^###\s*\*\*Sous-titre\*\*\s*$/gm, '')
         .replace(/^###\s*$/gm, '');
       const parts = text.split(/^###\s*\*\*CTA\*\*\s*$/m);
-      return [{ number, ...parseSection(parts[0].trim()), cta: parts[1] && unbold(parts[1]) }];
+      return [{ number, ...parseSection(fr(parts[0].trim())), cta: parts[1] && unbold(parts[1]) }];
     });
 }

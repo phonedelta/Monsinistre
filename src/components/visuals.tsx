@@ -296,6 +296,92 @@ function Method() {
   );
 }
 
+// The administration: a dossier board on a screen, a stack of dossiers and a protected access.
+function Console() {
+  const tiles = [196, 280, 364];
+  const rows = [218, 246, 274, 302];
+  return (
+    <>
+      <rect className="bp-fill" x="110" y="92" width="340" height="250" rx="12" />
+      <path className="bp-tint" d="M110 122H180V342H122A12 12 0 0 1 110 330Z" />
+      <path className="bp-fill" d="M52 372V300a8 8 0 0 1 8-8h34l12 14h54a8 8 0 0 1 8 8v58Z" />
+      <path className="bp-tint" d="M52 372V322H168V372Z" />
+      <path className="bp-fill" d="M486 256l40 14v34c0 30-18 50-40 62c-22-12-40-32-40-62v-34Z" />
+      <Line i={0} d="M24 372H536" />
+      <rect
+        className="bp-draw"
+        pathLength={1}
+        style={order(1)}
+        x="110"
+        y="92"
+        width="340"
+        height="250"
+        rx="12"
+      />
+      <Line i={2} d="M110 122H450" />
+      <Line i={3} d="M180 122V342" />
+      <Line i={4} accent d="M126 146H164" />
+      <Line i={4} soft d="M126 168H158M126 190H164M126 212H152M126 320H160" />
+      {tiles.map((x, n) => (
+        <g key={x}>
+          <rect
+            className="bp-draw"
+            pathLength={1}
+            style={order(5 + n)}
+            x={x}
+            y="138"
+            width="70"
+            height="44"
+            rx="8"
+          />
+          <Line i={5 + n} soft d={`M${x + 10} 152H${x + 42}`} />
+          <Line i={8 + n} accent d={`M${x + 10} 168H${x + 30}`} />
+        </g>
+      ))}
+      <rect
+        className="bp-draw"
+        pathLength={1}
+        style={order(9)}
+        x="196"
+        y="196"
+        width="154"
+        height="130"
+        rx="8"
+      />
+      <Line i={10} soft d="M208 310H338M208 212H252" />
+      <Line
+        i={11}
+        accent
+        d="M220 310V282M242 310V264M264 310V290M286 310V248M308 310V272M330 310V234"
+      />
+      <rect
+        className="bp-draw"
+        pathLength={1}
+        style={order(12)}
+        x="364"
+        y="196"
+        width="70"
+        height="130"
+        rx="8"
+      />
+      {rows.map((y, n) => (
+        <g key={y}>
+          <circle className="bp-draw" pathLength={1} style={order(13 + n)} cx="379" cy={y} r="5" />
+          <Line i={13 + n} soft d={`M392 ${y}H422`} />
+        </g>
+      ))}
+      <Line i={17} d="M52 372V300a8 8 0 0 1 8-8h34l12 14h54a8 8 0 0 1 8 8v58" />
+      <Line i={18} d="M52 322H168" />
+      <Line i={18} soft d="M70 340H120M70 354H104" />
+      <Line i={19} d="M486 256l40 14v34c0 30-18 50-40 62c-22-12-40-32-40-62v-34Z" />
+      <Line i={20} accent d="M469 310l12 12l22-26" />
+      <circle className="bp-ink" cx="127" cy="107" r="2.5" />
+      <circle className="bp-ink" cx="139" cy="107" r="2.5" />
+      <circle className="bp-ink" cx="151" cy="107" r="2.5" />
+    </>
+  );
+}
+
 type Tag = { x: number; y: number; text: string; flip?: boolean };
 // `sheet` is the part of the 560 × 440 sheet a drawing uses: its top and its height.
 type Sheet = [top: number, height: number];
@@ -353,12 +439,10 @@ function Stage({
   drawing: Drawing,
   sheet: [top, height] = [0, 440],
   tags,
-  numbered = false,
 }: {
   drawing: () => React.ReactNode;
   sheet?: Sheet;
   tags: Tag[];
-  numbered?: boolean;
 }) {
   return (
     <div className="visual-stage" style={{ aspectRatio: `560 / ${height}` }}>
@@ -376,10 +460,7 @@ function Stage({
           key={tag.text}
         >
           <i />
-          <span>
-            {numbered && <b>0{n + 1} · </b>}
-            {tag.text}
-          </span>
+          <span>{tag.text}</span>
         </span>
       ))}
     </div>
@@ -415,7 +496,6 @@ export function HeroVisual() {
     >
       <Stage
         drawing={House}
-        numbered
         tags={[
           { x: 72, y: 233, text: 'Identifier' },
           { x: 358, y: 206, text: 'Évaluer' },
@@ -425,9 +505,9 @@ export function HeroVisual() {
       <div className="visual-note">
         <ShieldCheck size={30} strokeWidth={1.5} />
         <div>
-          Une vision précise.
+          Votre dossier en ligne
           <br />
-          <strong>Un dossier solide.</strong>
+          <strong>Statut, pièces, échanges.</strong>
         </div>
       </div>
       <div className="visual-card">
@@ -439,21 +519,48 @@ export function HeroVisual() {
             <strong>Incendie habitation</strong>
             <small>MS-2026-000128</small>
           </div>
-          <span className="badge badge-expertise_en_cours">
+          <span className="badge badge-analyse_en_cours">
             <i />
-            Expertise en cours
+            Analyse en cours
           </span>
         </div>
         <div className="visual-progress">
           <span />
         </div>
         <ol className="visual-steps">
-          <li className="done">Analyse</li>
-          <li className="current">Expertise</li>
-          <li>Évaluation</li>
-          <li>Dossier</li>
+          <li className="done">Réception</li>
+          <li className="current">Étude</li>
+          <li>Expertise</li>
+          <li>Rapport</li>
         </ol>
       </div>
+    </div>
+  );
+}
+
+/* The administration drawing, light strokes on the navy of the team pages. `compact` is the
+   drawing alone, as a decoration (the dashboard banner). */
+export function AdminVisual({ compact = false }: { compact?: boolean }) {
+  return (
+    <div
+      className="visual visual-dark"
+      role={compact ? undefined : 'img'}
+      aria-hidden={compact || undefined}
+      aria-label={compact ? undefined : 'Dessin d’un tableau de suivi des dossiers'}
+    >
+      <Stage
+        drawing={Console}
+        sheet={[72, 320]}
+        tags={
+          compact
+            ? []
+            : [
+                { x: 96, y: 322, text: 'Dossiers' },
+                { x: 330, y: 234, text: 'Activité', flip: true },
+                { x: 486, y: 354, text: 'Accès protégé', flip: true },
+              ]
+        }
+      />
     </div>
   );
 }

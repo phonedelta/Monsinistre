@@ -55,10 +55,11 @@ La troisième commande génère le mot de passe de la base. Dans `nano`, renseig
 | Variable | Valeur |
 | --- | --- |
 | `DOMAIN` | Le nom d’hôte du VPS (`srv123456.hstgr.cloud`), sans `https://`. Vous le remplacerez par votre domaine à l’étape 6. |
-| `ADMIN_PHONE` | Votre numéro marocain, par exemple `0612345678`. Ce sera votre identifiant. |
+| `ADMIN_PHONE` | Votre numéro marocain, par exemple `0612345678`. Il reste attaché au compte et permet aussi de se connecter. |
+| `ADMIN_USERNAME` | L’identifiant de connexion de l’administrateur, par exemple `Monsinistre`. |
 | `ADMIN_NAME` | Votre nom et prénom. |
 | `ADMIN_PASSWORD` | 12 caractères minimum. Éviter les espaces et les caractères `$ " ' #`. |
-| `CONTACT_PHONE`, `CONTACT_WHATSAPP`, `CONTACT_EMAIL` | Les coordonnées affichées sur la page Contact. Laissées vides, elles ne s’affichent pas. |
+| `CONTACT_PHONE`, `CONTACT_WHATSAPP`, `CONTACT_EMAIL` | Facultatif : les coordonnées affichées sur la page Contact. Elles se modifient ensuite dans l’administration, page Paramètres. |
 
 Enregistrer avec `Ctrl+O`, `Entrée`, puis quitter avec `Ctrl+X`.
 
@@ -86,9 +87,10 @@ automatiquement ; cela peut prendre une minute au premier accès.
 docker compose -f compose.prod.yaml run --rm tools npm run db:seed
 ```
 
-La commande répond `Premier administrateur créé.` Se connecter sur `https://VOTRE_DOMAIN/connexion`
-avec le téléphone et le mot de passe choisis. Une fois connecté, effacer la valeur de
-`ADMIN_PASSWORD` dans `.env` (`nano .env`) : elle ne sert plus.
+La commande répond `Premier administrateur créé.` Se connecter sur `https://VOTRE_DOMAIN/admin`
+avec l’identifiant (ou le téléphone) et le mot de passe choisis. Cette page est réservée à l’équipe ;
+les clients, eux, se connectent sur `https://VOTRE_DOMAIN/connexion` (« Suivre mon dossier »). Une
+fois connecté, effacer la valeur de `ADMIN_PASSWORD` dans `.env` (`nano .env`) : elle ne sert plus.
 
 Pour ajouter plus tard un administrateur ou un expert, ajouter temporairement dans `.env` les
 lignes `STAFF_PHONE`, `STAFF_NAME`, `STAFF_PASSWORD` et `STAFF_ROLE` (`ADMIN` ou `EXPERT`),
@@ -182,7 +184,7 @@ Ne jamais ajouter `-v` à `down` : cette option supprime la base et les document
 ## 10. Avant l’ouverture au public
 
 - Remplacer l’adresse provisoire par votre nom de domaine (étape 6).
-- Renseigner les coordonnées de la page Contact, puis reconstruire (étape 7).
+- Renseigner les coordonnées de la page Contact dans l’administration, page Paramètres.
 - Compléter la page de confidentialité : informations de l’exploitant et durées de conservation.
 - Vérifier qu’une sauvegarde a bien été créée et rapatriée (étape 8).
 - Faire un essai complet : déposer une demande, joindre un document, la traiter côté administration.
@@ -196,4 +198,4 @@ Ne jamais ajouter `-v` à `down` : cette option supprime la base et les document
 | Avertissement de certificat | `docker compose -f compose.prod.yaml logs caddy`. Le nom indiqué dans `DOMAIN` doit pointer vers le serveur. |
 | « Origine invalide » à l’envoi d’un document | `DOMAIN` ne correspond pas à l’adresse utilisée dans le navigateur. |
 | `app` ne devient pas `healthy` | `docker compose -f compose.prod.yaml logs app migrate`. |
-| Les coordonnées de contact n’apparaissent pas | Elles sont lues à la construction : relancer avec `--build`. |
+| Les coordonnées de contact n’apparaissent pas | Les saisir dans l’administration, page Paramètres ; un champ vide n’est pas affiché. |

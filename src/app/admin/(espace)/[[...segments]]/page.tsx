@@ -31,16 +31,15 @@ export default async function AdminPage({
     case 'dossiers':
       return <AdminDossiers actor={actor} search={search} />;
     case 'documents':
-      return <PortalDocuments actor={actor} />;
+      return <PortalDocuments actor={actor} search={search} />;
     case 'clients':
       await requireUser(['ADMIN']);
       return <AdminClients q={typeof search.q === 'string' ? search.q : ''} />;
     case 'demandes-contact':
       await requireUser(['ADMIN']);
-      return <AdminContact />;
+      return <AdminContact search={search} />;
     case 'parametres':
-      await requireUser(['ADMIN']);
-      return <AdminSettings />;
+      return <AdminSettings actor={await requireUser(['ADMIN'])} search={search} />;
     default:
       notFound();
   }

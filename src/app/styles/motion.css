@@ -60,6 +60,11 @@
     stroke-dashoffset: 0;
   }
 }
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
 @keyframes loading-slide {
   from {
     transform: translateX(-100%);

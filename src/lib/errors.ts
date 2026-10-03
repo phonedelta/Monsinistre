@@ -1,12 +1,14 @@
 import { ZodError } from 'zod';
 import { Prisma } from '@prisma/client';
-export function errorMessage(error: unknown) {
+// `unexpected` replaces the wording of failures the person can do nothing about
+// (database, network); messages written for the person are returned as they are.
+export function errorMessage(error: unknown, unexpected?: string) {
   if (error instanceof ZodError)
     return error.issues.map((i) => `${i.path.join('.')} : ${i.message}`).join(' · ');
   if (error instanceof Prisma.PrismaClientKnownRequestError)
     return error.code === 'P2002'
       ? 'Cette demande ou ce compte existe déjà. Connectez-vous pour continuer.'
-      : 'Une erreur de base de données est survenue. Réessayez.';
+      : (unexpected ?? 'Une erreur de base de données est survenue. Réessayez.');
   if (
     error instanceof Error &&
     !error.message.includes('prisma') &&
@@ -14,7 +16,7 @@ export function errorMessage(error: unknown) {
   )
     return error.message;
   console.error('Operation failed', error instanceof Error ? error.name : 'unknown');
-  return 'Le service est momentanément indisponible. Réessayez plus tard.';
+  return unexpected ?? 'Le service est momentanément indisponible. Réessayez plus tard.';
 }
 export type ActionResult = {
   error?: string;

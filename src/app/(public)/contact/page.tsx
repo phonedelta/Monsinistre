@@ -1,59 +1,53 @@
-import { FileSearch, Mail, MessageCircle, PenLine, Phone, PhoneCall } from 'lucide-react';
+import { connection } from 'next/server';
+import Link from 'next/link';
+import { Mail, MessageCircle, Phone } from 'lucide-react';
 import { ActionForm } from '@/components/action-form';
 import { contact } from '@/app/actions/dossiers';
 import { PageBand } from '@/components/ui';
 import { Reveal } from '@/components/reveal';
+import { dialable, envContact, siteContact } from '@/lib/settings';
 export const metadata = { title: 'Contact' };
-export default function Contact() {
+export default async function Contact() {
+  // The contact details are edited in the administration settings: read them on each request,
+  // not once at build time. If they cannot be read, the page still shows the environment values.
+  await connection();
+  const details = await siteContact().catch(envContact);
   return (
     <>
       <PageBand
-        eyebrow="PARLONS DE VOTRE SITUATION"
-        title="Un premier échange pour avancer."
-        text="Décrivez votre besoin. Notre équipe examinera votre demande et vous recontactera."
+        eyebrow="CONTACT"
+        title="Écrivez-nous."
+        text="Décrivez votre situation : notre équipe vous recontacte pour en parler."
       />
       <section className="container section">
         <div className="two-col contact-layout">
           <Reveal>
             <aside>
-              <h2>Nous sommes à votre écoute.</h2>
+              <h2>Un dossier d’assurance en cours&nbsp;?</h2>
               <p>
-                Un sinistre, une question sur votre dossier ou des biens à faire évaluer :
-                choisissez le service qui vous concerne.
+                Vous pouvez aussi déposer votre demande depuis la page du service concerné&nbsp;:
+                son formulaire nous transmet directement vos réponses et vos documents.
               </p>
-              <ol className="contact-steps">
-                {(
-                  [
-                    [PenLine, 'Vous décrivez votre besoin'],
-                    [FileSearch, 'Notre équipe examine votre demande'],
-                    [PhoneCall, 'Nous vous recontactons'],
-                  ] as const
-                ).map(([Icon, t]) => (
-                  <li key={t}>
-                    <span>
-                      <Icon size={19} strokeWidth={1.5} />
-                    </span>
-                    {t}
-                  </li>
-                ))}
-              </ol>
+              <Link className="text-link" href="/services">
+                Voir les services →
+              </Link>
               <div className="contact-links">
-                {process.env.CONTACT_PHONE && (
-                  <a href={`tel:${process.env.CONTACT_PHONE}`}>
+                {details.phone && (
+                  <a href={`tel:${dialable(details.phone)}`}>
                     <Phone size={18} strokeWidth={1.5} />
-                    Téléphone : {process.env.CONTACT_PHONE}
+                    Téléphone&nbsp;: {details.phone}
                   </a>
                 )}
-                {process.env.CONTACT_WHATSAPP && (
-                  <a href={`https://wa.me/${process.env.CONTACT_WHATSAPP.replace(/\D/g, '')}`}>
+                {details.whatsapp && (
+                  <a href={`https://wa.me/${dialable(details.whatsapp).replace(/\D/g, '')}`}>
                     <MessageCircle size={18} strokeWidth={1.5} />
                     Échanger sur WhatsApp ↗
                   </a>
                 )}
-                {process.env.CONTACT_EMAIL && (
-                  <a href={`mailto:${process.env.CONTACT_EMAIL}`}>
+                {details.email && (
+                  <a href={`mailto:${details.email}`}>
                     <Mail size={18} strokeWidth={1.5} />
-                    {process.env.CONTACT_EMAIL}
+                    {details.email}
                   </a>
                 )}
               </div>

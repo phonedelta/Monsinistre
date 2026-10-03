@@ -125,7 +125,7 @@
   --container-max: 75rem; /* 1200px */
   --container-gutter: clamp(var(--space-5), 0.5rem + 3.2vw, var(--space-12));
   --header-height: 4.25rem; /* 68px */
-  --sidebar-width: 15rem; /* 240px */
+  --sidebar-width: 17rem; /* 272px — the longest label of the menu, plus a count */
   --logo-height: 1.875rem; /* 30px — header, footer */
   --logo-height-sm: 1.625rem; /* 26px — sidebar, mobile header */
   --control-height: 2.75rem; /* 44px — fields, buttons */

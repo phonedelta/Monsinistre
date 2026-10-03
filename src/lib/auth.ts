@@ -9,6 +9,7 @@ export const safeUser = {
   id: true,
   fullName: true,
   phone: true,
+  username: true,
   email: true,
   city: true,
   role: true,
@@ -16,7 +17,7 @@ export const safeUser = {
 } as const;
 export type Actor = Pick<
   User,
-  'id' | 'fullName' | 'phone' | 'email' | 'city' | 'role' | 'createdAt'
+  'id' | 'fullName' | 'phone' | 'username' | 'email' | 'city' | 'role' | 'createdAt'
 >;
 export async function currentUser(): Promise<Actor | null> {
   const token = (await cookies()).get(cookieName)?.value;
@@ -27,9 +28,16 @@ export async function currentUser(): Promise<Actor | null> {
   });
   return session && session.expiresAt > new Date() ? session.user : null;
 }
+// Where someone without a session signs in: clients and the team each have their own page.
+async function signInPage(roles?: Role[]) {
+  if (roles) return roles.includes('CLIENT') ? '/connexion' : '/admin/connexion';
+  // An action open to every role: go by the page it was sent from.
+  const from = (await headers()).get('referer') || '';
+  return /^https?:\/\/[^/]+\/admin(\/|$)/.test(from) ? '/admin/connexion' : '/connexion';
+}
 export async function requireUser(roles?: Role[]) {
   const user = await currentUser();
-  if (!user) redirect('/connexion');
+  if (!user) redirect(await signInPage(roles));
   if (roles && !roles.includes(user.role))
     redirect(user.role === 'CLIENT' ? '/mon-espace' : '/admin/dashboard');
   return user;
@@ -47,6 +55,11 @@ export async function createSession(userId: string) {
     path: '/',
     expires: expiresAt,
   });
+}
+// The identifier of the session behind the current request, to keep it when closing the others.
+export async function currentSessionId() {
+  const token = (await cookies()).get(cookieName)?.value;
+  return token ? digest(token) : null;
 }
 export async function destroySession() {
   const jar = await cookies();

@@ -16,136 +16,100 @@ Si votre local est assuré et que votre dossier est toujours en cours, Monsinist
 
 # **SECTION 2** 
 
-## **Après l’incendie, vos pertes continuent de s’accumuler**
+## Ce que l’incendie a coûté à votre commerce
 
 ### **Sous-titre**
 
-Le feu peut détruire en quelques minutes ce que vous avez construit pendant des années.
+Au-delà des murs, le feu touche le stock, le matériel et l’activité elle-même.
 
-### **Stock endommagé**
+### **Le stock**
 
-Marchandises brûlées, détériorées par la fumée, la chaleur ou l’eau utilisée pour l’extinction.
+Marchandises brûlées, ou abîmées par la fumée, la chaleur ou l’eau d’extinction.
 
-### **Équipements touchés**
+### **Le matériel**
 
-Machines, réfrigérateurs, mobilier, installations électriques ou équipements professionnels peuvent être inutilisables.
+Machines, réfrigérateurs, mobilier, installations électriques.
 
-### **Local à remettre en état**
+### **Le local**
 
-Murs, plafonds, installations et aménagements peuvent nécessiter des travaux importants.
+Murs, plafonds, rayonnages et agencements à remettre en état.
 
-### **Activité à l’arrêt**
+### **L’activité**
 
-Pendant que votre magasin reste fermé, les charges et engagements continuent.
-
-### **Et si l’évaluation est insuffisante ?**
-
-Une partie des pertes peut ne pas être correctement prise en compte si les dommages ne sont pas identifiés et documentés avec précision.
+Le magasin est fermé, mais les charges continuent.
 
 # **SECTION 3** 
 
-## Vous avez déjà perdu dans l’incendie. Ne perdez pas une deuxième fois sur l’indemnisation.
+## Les questions à vous poser
 
 ### **Sous-titre**
 
-Un dossier mal évalué peut créer un écart important entre vos pertes réelles et les dommages retenus.
+Un dossier mal évalué peut laisser de côté une partie de vos pertes.
 
-* Votre stock valait-il réellement le montant évalué ?  
-* Tous vos équipements endommagés ont-ils été identifiés ?  
-* Les dommages causés par la fumée, la chaleur ou l’extinction ont-ils été considérés ?  
-* Les différentes pertes liées au sinistre sont-elles correctement documentées ?
+* Votre stock valait-il réellement le montant retenu ?  
+* Tous vos équipements endommagés ont-ils été relevés ?  
+* La fumée, la chaleur et l’eau d’extinction ont-elles été prises en compte ?  
+* Chaque perte est-elle justifiée par un document ?
 
 ### **CTA**
 
-Je veux vérifier mon dossier
+Faire vérifier mon dossier
 
 # **SECTION 4** 
 
-## **Monsinistre peut intervenir si…**
+## Nous pouvons intervenir si…
 
-🔥 Votre magasin ou local commercial a subi un incendie.
-
-🛡️ Le local ou les biens concernés sont assurés.
-
-📂 Votre dossier d’assurance est toujours en cours.
-
-⏳ Votre compagnie d’assurance n’a pas encore rendu de décision définitive.
+* Votre magasin ou local commercial a subi un incendie.  
+* Le local ou les marchandises étaient assurés.  
+* Le dossier est toujours en cours, sans décision définitive de l’assurance.
 
 ### **CTA**
 
-**Mon dossier correspond à ces critères**
+**Mon dossier correspond**
 
 # **SECTION 5** 
 
-## Une expertise technique pour défendre la réalité de vos pertes
+## Ce que nous faisons
 
 ### **Sous-titre**
 
-Monsinistre transforme les conséquences du sinistre en un dossier technique clair, documenté et structuré.
-
-Nous analysons le sinistre, examinons les dommages, évaluons les pertes et structurons les éléments techniques nécessaires au traitement de votre dossier.
-
-L’objectif : faire en sorte que la réalité de vos pertes soit correctement représentée dans le dossier.
+Nous examinons les dommages, évaluons les pertes et réunissons les justificatifs dans un dossier technique, pour que l’évaluation retenue corresponde à ce que vous avez perdu.
 
 ### **CTA**
 
 Demander une prise en charge
 
-# **SECTION 6** 
-
-## **Un incendie commercial ne touche pas uniquement les murs**
-
-### **Marchandises & stock**
-
-Produits brûlés, détériorés ou rendus impropres à la vente.
-
-### **Matériel & équipements**
-
-Machines, appareils, mobilier et équipements nécessaires à votre activité.
-
-### **Aménagement du magasin**
-
-Rayonnages, comptoirs, décoration, installations et agencements.
-
-### **Installations techniques**
-
-Électricité et autres équipements potentiellement affectés par le sinistre.
-
-### **Bâtiment**
-
-Murs, sols, plafonds et autres éléments touchés.
-
 # **SECTION 8**
 
-## **Chaque commerce subit l’incendie différemment**
+## Selon votre commerce
 
-### **Épiceries & commerces alimentaires**
+### **Alimentation**
 
 Stock, réfrigérateurs, congélateurs et marchandises sensibles.
 
-### **Magasins de vêtements & tissus**
+### **Vêtements & tissus**
 
-Stock particulièrement exposé à la fumée, à l’humidité et aux odeurs.
+Un stock très exposé à la fumée, à l’humidité et aux odeurs.
 
-### **Électroménager & équipements électriques**
+### **Électroménager & électricité**
 
-Des appareils peuvent être techniquement affectés sans présenter de dommage extérieur évident.
+Des appareils peuvent être endommagés sans trace extérieure.
 
 ### **Pharmacies**
 
-Médicaments, équipements, systèmes de conservation et stock à forte valeur.
+Médicaments, chaîne du froid, équipements et stock de forte valeur.
 
-### **Commerces en marchés & kissariats**
+### **Marchés & kissariats**
 
-Votre magasin peut subir des dommages même lorsque le foyer de l’incendie se situe dans un commerce voisin.
+Votre magasin peut être touché même si le feu a pris chez un voisin.
 
 # **SECTION 12**
 
-## Votre magasin a déjà subi l’incendie. Ne laissez pas un dossier incomplet aggraver la perte.
+## Avant la décision de l’assurance
 
 ### **Sous-titre**
 
-Si votre commerce est assuré, que le sinistre a déjà eu lieu et que votre dossier est toujours en cours, faites examiner vos dommages avant la décision définitive de l’assurance.
+Si votre commerce est assuré et que le dossier est en cours, faites examiner les dommages avant la décision définitive.
 
 ### **CTA**
 

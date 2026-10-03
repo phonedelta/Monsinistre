@@ -5,8 +5,6 @@ import {
   Check,
   Droplets,
   Flame,
-  FolderCheck,
-  Handshake,
   ShieldCheck,
   Thermometer,
   Wind,
@@ -23,28 +21,25 @@ export default function Home() {
       <section className="hero-band">
         <div className="hero container">
           <div className="hero-copy enter">
-            <div className="pill">
-              <span className="small-dot" /> Expertise indépendante · Maroc
-            </div>
+            <p className="hero-kicker">Expertise indépendante au Maroc</p>
             <h1>
-              Après l’imprévu,
+              Après un incendie,
               <br />
-              retrouvez
+              un expert
               <br />
-              <em>un cap clair.</em>
+              <em>de votre côté.</em>
             </h1>
             <p>
-              Évaluer les dommages. Comprendre vos options.
-              <br className="desktop" /> Défendre la réalité de vos pertes.
-              <br />
-              Monsinistre est à vos côtés, à chaque étape.
+              Nous évaluons les dommages d’un logement ou d’un commerce incendié et préparons le
+              dossier technique pour votre assurance. Nous expertisons aussi les biens de valeur
+              avant leur assurance.
             </p>
             <div className="hero-actions">
               <a className="btn btn-lg" href="#parcours">
-                Trouver mon accompagnement <ArrowDown size={18} />
+                Choisir ma situation <ArrowDown size={18} />
               </a>
               <Link className="text-link" href="/services">
-                Découvrir nos services <ArrowRight size={17} />
+                Voir les services <ArrowRight size={17} />
               </Link>
             </div>
             <div className="hero-trust">
@@ -58,7 +53,7 @@ export default function Home() {
       <section className="section container" id="parcours">
         <Reveal stagger className="paths">
           <Link className="path-card dark" href="/services/incendie">
-            <div className="path-number">01 / APRÈS UN SINISTRE</div>
+            <div className="card-tag">Après un sinistre</div>
             <h2>
               J’ai subi
               <br />
@@ -73,13 +68,15 @@ export default function Home() {
             </span>
           </Link>
           <Link className="path-card soft" href="/services/expertise-prealable">
-            <div className="path-number">02 / AVANT D’ASSURER</div>
+            <div className="card-tag">Avant d’assurer</div>
             <h2>
               Je souhaite faire
               <br />
               évaluer mes biens.
             </h2>
-            <p>Connaissez et documentez la valeur de ce qui vous est précieux.</p>
+            <p>
+              Bijoux, montres, œuvres d’art&nbsp;: faites établir leur valeur avant de les assurer.
+            </p>
             <span>
               Demander une expertise préalable
               <span className="path-arrow">
@@ -88,53 +85,31 @@ export default function Home() {
             </span>
           </Link>
         </Reveal>
-        <Reveal stagger className="reassurance">
-          {[
-            [ShieldCheck, 'Une expertise technique'],
-            [FolderCheck, 'Des pertes documentées'],
-            [Handshake, 'Un suivi humain'],
-          ].map(([Icon, t]) => {
-            const I = Icon as typeof ShieldCheck;
-            return (
-              <div key={String(t)}>
-                <I size={22} strokeWidth={1.5} />
-                <span>{String(t)}</span>
-              </div>
-            );
-          })}
-        </Reveal>
       </section>
       <section className="section pale">
         <div className="container">
           <Reveal className="section-row">
-            <SectionTitle
-              eyebrow="NOS DOMAINES D’INTERVENTION"
-              title="Une expertise adaptée à votre situation."
-            />
-            <p>
-              Chaque bien a ses particularités.
-              <br />
-              Chaque dossier mérite une attention précise.
-            </p>
+            <SectionTitle eyebrow="NOS SERVICES" title="Un parcours pour chaque situation." />
+            <p>Chaque parcours a son formulaire, avec les questions propres à votre cas.</p>
           </Reveal>
           <ServiceCards />
         </div>
       </section>
       <section className="section container approach">
         <Reveal>
-          <span className="eyebrow">NOTRE ENGAGEMENT</span>
+          <span className="eyebrow">CE QUE NOUS EXAMINONS</span>
           <h2>
-            Voir au-delà des dommages visibles.
+            Un incendie abîme
             <br />
-            <em>Faire valoir ce qui compte.</em>
+            <em>plus que ce qui a brûlé.</em>
           </h2>
           <p>
-            La fumée, la chaleur, l’eau d’extinction : les conséquences d’un incendie ne s’arrêtent
-            pas à ce qui a brûlé. Nous identifions, évaluons et documentons les pertes pour
-            construire un dossier technique structuré.
+            La fumée gagne les pièces voisines, la chaleur fragilise l’électricité, l’eau des
+            pompiers abîme les plafonds. Ces dommages passent facilement inaperçus&nbsp;: nous les
+            recherchons et les documentons pour votre dossier.
           </p>
           <Link className="text-link" href="/a-propos">
-            Découvrir notre approche <ArrowUpRight size={18} />
+            En savoir plus sur Monsinistre <ArrowUpRight size={18} />
           </Link>
         </Reveal>
         <Reveal as="ul" stagger className="sources">
@@ -142,8 +117,8 @@ export default function Home() {
             [Flame, 'Le feu'],
             [Wind, 'La fumée'],
             [Thermometer, 'La chaleur'],
-            [Droplets, 'L’extinction'],
-            [Zap, 'Les installations'],
+            [Droplets, 'L’eau d’extinction'],
+            [Zap, 'L’électricité'],
           ].map(([Icon, t]) => {
             const I = Icon as typeof Flame;
             return (

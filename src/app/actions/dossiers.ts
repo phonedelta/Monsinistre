@@ -21,7 +21,7 @@ import {
   phoneSchema,
 } from '@/lib/forms';
 import { errorMessage, type ActionResult } from '@/lib/errors';
-import { terminalStatuses } from '@/lib/constants';
+import { submissionFailed, terminalStatuses } from '@/lib/constants';
 export async function submitDossier(raw: unknown): Promise<ActionResult> {
   try {
     const input = z
@@ -39,10 +39,12 @@ export async function submitDossier(raw: unknown): Promise<ActionResult> {
     if (input.type === 'INCENDIE_COMMERCE' && !input.person.businessName)
       throw new Error('Le nom du commerce est obligatoire.');
     await rateLimit('submission', await clientIp(), 40);
-    let user = await currentUser();
+    // The request belongs to the client named in the form. A team member signed in on the same
+    // browser (testing the form, or filling it for someone) is treated as a visitor here; the
+    // browser is then signed in as that client, like for any new request.
+    const signedIn = await currentUser();
+    let user = signedIn?.role === 'CLIENT' ? signedIn : null;
     let newAccount = false;
-    if (user && user.role !== 'CLIENT')
-      throw new Error('Utilisez un compte client pour déposer une demande.');
     if (!user) {
       const existing = await db.user.findUnique({ where: { phone: input.person.phone } });
       if (existing) {
@@ -59,6 +61,10 @@ export async function submitDossier(raw: unknown): Promise<ActionResult> {
         )
           throw new Error('Téléphone ou mot de passe incorrect.');
         user = existing;
+      } else if (input.authenticateExisting) {
+        // Signing in was asked for a number that has no account: same answer as a wrong password.
+        await rateLimit('login-phone', input.person.phone);
+        throw new Error('Téléphone ou mot de passe incorrect.');
       } else {
         passwordSchema.parse(input.password);
         if (input.password !== input.confirmPassword)
@@ -130,7 +136,7 @@ export async function submitDossier(raw: unknown): Promise<ActionResult> {
         : 'Votre dossier a été ajouté à votre compte.',
     };
   } catch (e) {
-    return { error: errorMessage(e) };
+    return { error: errorMessage(e, submissionFailed) };
   }
 }
 export async function dossierAction(_: ActionResult, form: FormData): Promise<ActionResult> {
@@ -138,9 +144,7 @@ export async function dossierAction(_: ActionResult, form: FormData): Promise<Ac
   try {
     const reference = z.string().max(80).parse(form.get('reference'));
     const dossier = await authorizedDossier(reference, actor);
-    const action = z
-      .enum(['status', 'message', 'note', 'assign', 'request', 'fulfill'])
-      .parse(form.get('action'));
+    const action = z.enum(['status', 'message', 'request', 'fulfill']).parse(form.get('action'));
     if (action !== 'message' && actor.role === 'CLIENT')
       throw new Error('Action réservée à l’équipe.');
     await rateLimit('dossier-action', actor.id, 100, 60);
@@ -178,21 +182,11 @@ export async function dossierAction(_: ActionResult, form: FormData): Promise<Ac
           });
         }
         detail = status;
-      } else if (action === 'message' || action === 'note') {
+      } else if (action === 'message') {
         const body = z.string().trim().min(1).max(5000).parse(form.get('body'));
-        const data = { dossierId: dossier.id, authorId: actor.id, body };
-        if (action === 'message') await tx.dossierMessage.create({ data });
-        else await tx.dossierNote.create({ data });
-      } else if (action === 'assign') {
-        if (actor.role !== 'ADMIN') throw new Error('Action réservée à un administrateur.');
-        const id = z
-          .string()
-          .max(80)
-          .parse(form.get('assignedTo') || '');
-        if (id && !(await tx.user.findFirst({ where: { id, role: { in: ['ADMIN', 'EXPERT'] } } })))
-          throw new Error('Responsable invalide.');
-        await tx.dossier.update({ where: { id: dossier.id }, data: { assignedTo: id || null } });
-        detail = id || 'Non assigné';
+        await tx.dossierMessage.create({
+          data: { dossierId: dossier.id, authorId: actor.id, body },
+        });
       } else if (action === 'request') {
         const label = z.string().trim().min(3).max(250).parse(form.get('label'));
         await tx.documentRequest.create({ data: { dossierId: dossier.id, label } });

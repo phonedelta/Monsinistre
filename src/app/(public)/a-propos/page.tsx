@@ -1,5 +1,5 @@
-import { Eye, Handshake, Ruler, Scale, ScanSearch } from 'lucide-react';
-import { PageBand, SectionTitle } from '@/components/ui';
+import { Check } from 'lucide-react';
+import { PageBand } from '@/components/ui';
 import { FinalCta } from '@/components/public';
 import { ServiceVisual } from '@/components/visuals';
 import { Reveal } from '@/components/reveal';
@@ -8,82 +8,70 @@ export default function About() {
   return (
     <>
       <PageBand
-        eyebrow="À PROPOS DE MONSINISTRE"
-        title="De la rigueur technique. De la présence humaine."
-        text="Notre mission : vous aider à comprendre, documenter et défendre la réalité de votre situation."
+        eyebrow="À PROPOS"
+        title="Des experts au service de l’assuré."
+        text="Monsinistre accompagne au Maroc les particuliers et les professionnels après un incendie, et expertise les biens de valeur avant leur assurance."
       />
       <section className="container section">
         <div className="two-col about-intro">
           <ServiceVisual kind="methode" />
           <Reveal className="prose">
-            <h2>Une expertise au service de l’assuré.</h2>
+            <h2>Notre rôle</h2>
             <p>
-              Monsinistre accompagne les particuliers et les professionnels au Maroc dans
-              l’évaluation technique des dommages et la constitution de leurs dossiers après un
-              incendie.
+              Après un incendie, nous examinons les dommages, évaluons les pertes et constituons le
+              dossier technique qui servira dans vos échanges avec l’assurance.
             </p>
             <p>
-              Nous intervenons également avant l’assurance, pour identifier et documenter la valeur
-              des bijoux, montres, tableaux et autres biens précieux.
+              Avant une assurance, nous identifions et documentons la valeur de vos bijoux, montres,
+              tableaux et objets de valeur.
             </p>
             <p>
-              Notre approche repose sur l’étude des faits, l’analyse des pièces et un échange clair
-              à chaque étape. Vous disposez d’un espace personnel pour suivre votre dossier et
-              communiquer avec notre équipe.
+              Chaque client dispose d’un espace en ligne pour suivre l’avancement, transmettre ses
+              documents et échanger avec notre équipe.
             </p>
           </Reveal>
         </div>
       </section>
       <section className="section pale">
-        <div className="container">
-          <Reveal>
-            <SectionTitle
-              eyebrow="NOS PRINCIPES"
-              title="Une mission claire, des engagements concrets."
-            />
+        <div className="container editorial-grid">
+          <Reveal as="header" className="editorial-head">
+            <span className="eyebrow">APRÈS UN INCENDIE</span>
+            <h2>Quand pouvons-nous intervenir&nbsp;?</h2>
+            <div className="prose">
+              <p>L’examen est le plus utile tant que l’assurance n’a pas rendu sa décision.</p>
+            </div>
           </Reveal>
-          <Reveal stagger className="feature-grid wide">
-            {(
-              [
-                [
-                  ScanSearch,
-                  'Expertise',
-                  'Examiner les dommages et les biens avec une approche technique adaptée.',
-                ],
-                [
-                  Ruler,
-                  'Rigueur',
-                  'Identifier, évaluer et documenter les éléments de façon méthodique.',
-                ],
-                [
-                  Eye,
-                  'Transparence',
-                  'Rendre les étapes, les demandes de documents et les échanges accessibles.',
-                ],
-                [
-                  Handshake,
-                  'Accompagnement',
-                  'Vous aider à gérer les aspects techniques de votre dossier.',
-                ],
-                [
-                  Scale,
-                  'Défense des intérêts de l’assuré',
-                  'Faire en sorte que les pertes réellement subies soient correctement représentées.',
-                ],
-              ] as const
-            ).map(([Icon, t, d]) => (
-              <article className="feature" key={t}>
-                <span className="feature-icon">
-                  <Icon size={22} strokeWidth={1.5} />
-                </span>
-                <h3>{t}</h3>
-                <p>{d}</p>
-              </article>
-            ))}
-          </Reveal>
+          <div className="editorial-body">
+            <Reveal as="ul" stagger className="check-list">
+              {[
+                'Le logement ou le commerce était assuré au moment de l’incendie.',
+                'Le sinistre a été déclaré et le dossier est toujours en cours.',
+                'L’assurance n’a pas encore rendu de décision définitive.',
+              ].map((condition) => (
+                <li key={condition}>
+                  <Check size={20} />
+                  <span>{condition}</span>
+                </li>
+              ))}
+            </Reveal>
+            <p>
+              L’expertise préalable, elle, se demande à tout moment&nbsp;: avant d’assurer ou de
+              renouveler une couverture, ou simplement pour connaître la valeur de vos biens.
+            </p>
+          </div>
         </div>
       </section>
-      <FinalCta />
+      <FinalCta
+        eyebrow="UN DOSSIER EN COURS ?"
+        title={
+          <>
+            Votre assurance n’a pas
+            <br />
+            encore rendu sa décision&nbsp;?
+          </>
+        }
+        text="Déposez votre demande en ligne depuis la page du service, ou écrivez-nous : nous étudions votre situation."
+      />
     </>
   );
 }

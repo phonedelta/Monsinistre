@@ -10,20 +10,17 @@ export default function Login() {
         <div className="auth-aside enter">
           <span className="eyebrow">VOTRE ESPACE MONSINISTRE</span>
           <h1>
-            Un dossier suivi.
+            Votre dossier,
             <br />
-            <em>Un esprit plus serein.</em>
+            <em>suivi en ligne.</em>
           </h1>
-          <p>
-            Retrouvez vos documents, échangez avec notre équipe et suivez chaque étape de votre
-            dossier.
-          </p>
+          <p>Statut, documents demandés, messages de l’équipe&nbsp;: tout est au même endroit.</p>
           <span className="secure-label">
             <LockKeyhole size={18} /> Un espace personnel et sécurisé
           </span>
         </div>
         <div className="panel auth-panel">
-          <span className="eyebrow">HEUREUX DE VOUS RETROUVER</span>
+          <span className="eyebrow">ESPACE CLIENT</span>
           <h2>Se connecter</h2>
           <p>Utilisez le numéro indiqué lors de votre demande.</p>
           <ActionForm action={login} label="Se connecter">
@@ -34,6 +31,7 @@ export default function Login() {
                 type="tel"
                 autoComplete="username"
                 placeholder="06 12 34 56 78"
+                maxLength={64}
                 required
               />
             </label>
@@ -49,10 +47,10 @@ export default function Login() {
             </label>
           </ActionForm>
           <Link className="text-link" href="/mot-de-passe-oublie">
-            Mot de passe oublié ?
+            Mot de passe oublié&nbsp;?
           </Link>
           <div className="auth-bottom">
-            Votre première visite ?<Link href="/services">Déposer une demande →</Link>
+            Votre première visite&nbsp;?<Link href="/services">Déposer une demande →</Link>
           </div>
         </div>
       </div>

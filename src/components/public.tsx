@@ -1,51 +1,53 @@
 import Link from 'next/link';
-import { House, Store, Gem, Flame, ArrowUpRight, Check } from 'lucide-react';
+import { House, Store, Gem, Flame, ArrowUpRight } from 'lucide-react';
 import { Logo, SectionTitle, ButtonLink } from './ui';
 import { Reveal } from './reveal';
+import { fr } from '@/lib/typography';
 export const services = [
   {
     slug: 'incendie',
     title: 'Après un incendie',
     text: 'Une analyse technique pour comprendre les dommages et renforcer votre dossier d’assurance.',
     icon: Flame,
-    tag: 'ACCOMPAGNEMENT',
+    tag: 'Accompagnement',
   },
   {
     slug: 'incendie-habitation',
     title: 'Votre habitation',
     text: 'Maison, villa ou appartement : identifier et documenter l’ensemble des dommages.',
     icon: House,
-    tag: 'PARTICULIERS',
+    tag: 'Particuliers',
   },
   {
     slug: 'incendie-magasins',
     title: 'Votre commerce',
     text: 'Stock, équipements et locaux : une évaluation adaptée à la réalité de votre activité.',
     icon: Store,
-    tag: 'PROFESSIONNELS',
+    tag: 'Professionnels',
   },
   {
     slug: 'expertise-prealable',
     title: 'Vos biens de valeur',
     text: 'Bijoux, montres et œuvres d’art : connaître leur valeur avant de les assurer.',
     icon: Gem,
-    tag: 'EXPERTISE PRÉALABLE',
+    tag: 'Expertise préalable',
   },
 ];
-export function ServiceCards() {
+// `only` keeps some of the services, by their address: the page about fires shows its two.
+export function ServiceCards({ only }: { only?: string[] }) {
+  const shown = only ? services.filter((s) => only.includes(s.slug)) : services;
   return (
-    <Reveal stagger className="service-grid">
-      {services.map((s, i) => (
+    <Reveal stagger className={shown.length === 2 ? 'service-grid pair' : 'service-grid'}>
+      {shown.map((s) => (
         <Link className="service-card" key={s.slug} href={`/services/${s.slug}`}>
           <div className="card-top">
             <span className="service-icon">
               <s.icon size={24} strokeWidth={1.5} />
             </span>
-            <span>0{i + 1}</span>
           </div>
-          <span className="eyebrow">{s.tag}</span>
+          <span className="card-tag">{s.tag}</span>
           <h3>{s.title}</h3>
-          <p>{s.text}</p>
+          <p>{fr(s.text)}</p>
           <span className="service-link">
             Découvrir l’accompagnement <ArrowUpRight size={17} />
           </span>
@@ -58,23 +60,20 @@ export function Process() {
   return (
     <section className="section pale">
       <div className="container">
-        <SectionTitle
-          eyebrow="UNE DÉMARCHE CLAIRE"
-          title="À chaque étape, vous savez où vous en êtes."
-        />
+        <SectionTitle eyebrow="COMMENT ÇA SE PASSE" title="De la demande au suivi en ligne." />
         <Reveal stagger className="process-grid">
           {[
             [
-              'Parlons de votre situation',
-              'Vous nous transmettez les premières informations grâce à un formulaire adapté.',
+              'Vous décrivez votre situation',
+              'Un formulaire par type de dossier, où vous joignez aussi vos photos et documents.',
             ],
             [
-              'Nous étudions votre dossier',
-              'Notre équipe examine vos documents et précise les prochaines étapes.',
+              'Nous étudions le dossier',
+              'Nous vous disons ce que nous pouvons faire et quelles pièces il nous manque.',
             ],
             [
-              'Nous vous accompagnons',
-              'Retrouvez vos échanges, vos documents et l’avancement dans votre espace.',
+              'Vous suivez l’avancement',
+              'Statut, documents demandés et messages de l’équipe : tout est dans votre espace.',
             ],
           ].map(([t, d], i) => (
             <article key={t}>
@@ -88,21 +87,34 @@ export function Process() {
     </section>
   );
 }
-export function FinalCta() {
+// The invitation to write to the team that ends a page, worded for that page.
+export function FinalCta({
+  eyebrow = 'UNE QUESTION AVANT DE COMMENCER ?',
+  title = (
+    <>
+      Parlez-nous
+      <br />
+      de votre situation.
+    </>
+  ),
+  text = 'Décrivez-la en quelques lignes : nous vous recontactons pour vous dire si nous pouvons intervenir.',
+  action = 'Nous contacter',
+}: {
+  eyebrow?: string;
+  title?: React.ReactNode;
+  text?: string;
+  action?: string;
+}) {
   return (
     <section className="section">
       <Reveal className="container final-cta">
         <div>
-          <span className="eyebrow">FAISONS LE POINT, ENSEMBLE</span>
-          <h2>
-            Votre situation mérite
-            <br />
-            une expertise attentive.
-          </h2>
-          <p>Expliquez-nous votre besoin. Nous vous aidons à y voir plus clair.</p>
+          <span className="eyebrow">{eyebrow}</span>
+          <h2>{title}</h2>
+          <p>{fr(text)}</p>
         </div>
         <ButtonLink href="/contact" large>
-          Parler de ma situation
+          {action}
         </ButtonLink>
       </Reveal>
     </section>
@@ -115,14 +127,14 @@ export function Footer() {
         <div>
           <Logo light />
           <p>
-            L’expertise qui éclaire vos décisions.
+            Expertise après incendie
             <br />
-            L’accompagnement qui fait la différence.
+            et expertise préalable des biens de valeur.
           </p>
           <span className="footer-country">MAROC · PARTICULIERS & PROFESSIONNELS</span>
         </div>
         <div>
-          <h4>Nos expertises</h4>
+          <h4>Services</h4>
           {services.map((s) => (
             <Link key={s.slug} href={`/services/${s.slug}`}>
               {s.title}
@@ -130,7 +142,7 @@ export function Footer() {
           ))}
         </div>
         <div>
-          <h4>À vos côtés</h4>
+          <h4>Monsinistre</h4>
           <Link href="/a-propos">À propos de Monsinistre</Link>
           <Link href="/contact">Nous contacter</Link>
           <Link href="/connexion">Mon espace client</Link>
@@ -140,7 +152,10 @@ export function Footer() {
       <div className="container footer-bottom">
         <span>© {new Date().getFullYear()} Monsinistre</span>
         <span>
-          <Check size={14} /> Expertise · Rigueur · Transparence
+          Conçu et réalisé par{' '}
+          <a href="https://thinkgroup.ma" target="_blank" rel="noopener">
+            ThinkGroup
+          </a>
         </span>
       </div>
     </footer>

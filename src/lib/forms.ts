@@ -7,18 +7,21 @@ export type Field = {
   multiple?: boolean;
   kind?: 'date' | 'text';
   optional?: boolean;
+  // A question about documents: each chosen option gets a field to attach its files…
+  attach?: boolean;
+  // …except this option, which says there is none and cannot be combined with the others.
+  none?: string;
 };
 export type Step = { title: string; fields: Field[] };
 const yesNo = ['Oui', 'Non'];
-const unsure = [...yesNo, 'Je ne sais pas'];
 const insurance: Field[] = [
-  { key: 'insured', label: 'Le bien était-il assuré au moment de l’incendie ?', options: unsure },
+  { key: 'insured', label: 'Le bien était-il assuré au moment de l’incendie ?', options: yesNo },
   { key: 'declared', label: 'Le sinistre a-t-il été déclaré à l’assurance ?', options: yesNo },
-  { key: 'ongoing', label: 'Votre dossier est-il toujours en cours ?', options: unsure },
+  { key: 'ongoing', label: 'Votre dossier est-il toujours en cours ?', options: yesNo },
   {
     key: 'finalDecision',
     label: 'Avez-vous reçu une décision définitive ?',
-    options: ['Non', 'Oui', 'Je ne sais pas'],
+    options: ['Non', 'Oui'],
   },
   {
     key: 'firstEvaluation',
@@ -66,6 +69,8 @@ export const formSteps: Record<string, Step[]> = {
           label: 'Quels documents sont disponibles ?',
           multiple: true,
           optional: true,
+          attach: true,
+          none: 'Aucun pour le moment',
           options: [
             'Photos / vidéos',
             'Rapport / expertise',
@@ -136,6 +141,7 @@ export const formSteps: Record<string, Step[]> = {
           label: 'Disposez-vous déjà de documents ?',
           multiple: true,
           optional: true,
+          attach: true,
           options: [
             'Photos / vidéos',
             'Inventaire du stock',
@@ -207,13 +213,14 @@ export const formSteps: Record<string, Step[]> = {
           label: 'Avez-vous des documents concernant ces biens ?',
           multiple: true,
           optional: true,
+          attach: true,
+          none: 'Aucun document',
           options: [
             'Factures',
             'Certificats',
             'Anciennes expertises',
             'Photos / documents',
             'Aucun document',
-            'Je ne sais pas',
           ],
         },
       ],
@@ -235,6 +242,27 @@ export const formSteps: Record<string, Step[]> = {
     },
   ],
 };
+// Files chosen in the request form are sent once the dossier exists; this many at most, the
+// rest can be added from the dossier itself.
+export const attachmentLimit = 10;
+// The category (see documentCategories) of a file attached under an option of a documents
+// question. Photos, videos and the mixed options go by the kind of the file.
+const optionCategories: Record<string, string> = {
+  'Rapport / expertise': 'Rapport d’expertise',
+  'Rapport d’expertise': 'Rapport d’expertise',
+  'Anciennes expertises': 'Rapport d’expertise',
+  'Proposition d’indemnisation': 'Proposition d’indemnisation',
+  'Échanges avec l’assurance': 'Échanges avec l’assurance',
+  'Inventaire du stock': 'Inventaire',
+  Factures: 'Facture',
+  Certificats: 'Certificat',
+};
+export function attachmentCategory(option: string, mime: string) {
+  return (
+    optionCategories[option] ||
+    (mime.startsWith('image/') ? 'Photo' : mime.startsWith('video/') ? 'Vidéo' : 'PDF')
+  );
+}
 export const phoneSchema = z.string().transform((value, ctx) => {
   try {
     return normalizePhone(value);
@@ -247,6 +275,26 @@ export const passwordSchema = z
   .string()
   .min(12, 'Utilisez au moins 12 caractères.')
   .refine((v) => new TextEncoder().encode(v).length <= 72, '72 octets maximum.');
+// A team sign-in name: 3 to 32 letters, digits, dots or hyphens, with at least one letter so it
+// can never be read as a phone number. No `_` or `%`: it is matched case-insensitively (ILIKE).
+const usernamePattern = /^(?=.*[a-zA-Z])[a-zA-Z0-9][a-zA-Z0-9.-]{1,30}[a-zA-Z0-9]$/;
+export const usernameSchema = z
+  .string()
+  .trim()
+  .regex(
+    usernamePattern,
+    'Identifiant : 3 à 32 lettres, chiffres, points ou tirets, dont au moins une lettre.',
+  );
+// What a person types to sign in: a team username, or a Moroccan phone number.
+export function loginIdentifier(input: string): { username: string } | { phone: string } {
+  const value = input.trim();
+  if (usernamePattern.test(value)) return { username: value };
+  try {
+    return { phone: normalizePhone(value) };
+  } catch {
+    throw new Error('Saisissez votre numéro de téléphone ou votre identifiant.');
+  }
+}
 export const personSchema = z.object({
   fullName: z.string().trim().min(3).max(120),
   phone: phoneSchema,
@@ -266,6 +314,9 @@ export function validateAnswers(type: string, data: unknown) {
             .array(choice)
             .min(field.optional ? 0 : 1)
             .max(field.options.length)
+            .refine((v) => !field.none || !v.includes(field.none) || v.length === 1, {
+              message: 'Choix incompatibles.',
+            })
         : choice;
     } else if (field.kind === 'date')
       rule = z.iso

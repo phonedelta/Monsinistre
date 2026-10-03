@@ -1,7 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowUpRight, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowUpRight, ShieldCheck, ArrowRight, FileText, Film, ImageIcon } from 'lucide-react';
 import { statusLabels } from '@/lib/constants';
+import { fr } from '@/lib/typography';
 import logo from '@/assets/logo.png';
 import logoLight from '@/assets/logo-light.png';
 // `light` is the white-wordmark version, for navy backgrounds.
@@ -12,6 +13,11 @@ export function Logo({ light = false }: { light?: boolean }) {
       <Image src={light ? logoLight : logo} alt="" sizes="240px" loading="eager" />
     </Link>
   );
+}
+// The icon of a file, by its kind: picture, video, or any other document.
+export function FileIcon({ type, size = 16 }: { type: string; size?: number }) {
+  const Icon = type.startsWith('image/') ? ImageIcon : type.startsWith('video/') ? Film : FileText;
+  return <Icon size={size} />;
 }
 export function ButtonLink({
   href,
@@ -46,8 +52,8 @@ export function SectionTitle({
   return (
     <div className="section-heading">
       <span className="eyebrow">{eyebrow}</span>
-      <h2>{title}</h2>
-      {text && <p>{text}</p>}
+      <h2>{fr(title)}</h2>
+      {text && <p>{fr(text)}</p>}
     </div>
   );
 }
@@ -75,7 +81,7 @@ export function Empty({
   );
 }
 type Heading = {
-  eyebrow?: string;
+  eyebrow?: React.ReactNode;
   title: string;
   text?: string;
   children?: React.ReactNode;
@@ -91,8 +97,8 @@ export function PageHeading({
     <div className="page-heading">
       <div className={enter ? 'enter' : undefined}>
         {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-        <h1>{title}</h1>
-        {text && <p>{text}</p>}
+        <h1>{fr(title)}</h1>
+        {text && <p>{fr(text)}</p>}
       </div>
       {children}
     </div>

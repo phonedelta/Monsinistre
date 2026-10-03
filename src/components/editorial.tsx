@@ -94,16 +94,14 @@ function Block({ block }: { block: EditorialBlock }) {
     );
   return (
     <Reveal stagger className="feature-grid">
-      {block.items.map((item, i) => {
+      {block.items.map((item) => {
         const Icon = item.icon ? icons[item.icon] : undefined;
         return (
           <article className="feature" key={item.title}>
-            {item.icon ? (
+            {item.icon && (
               <span className="feature-icon">
                 {Icon ? <Icon size={22} strokeWidth={1.5} /> : item.icon}
               </span>
-            ) : (
-              <span className="feature-index">{String(i + 1).padStart(2, '0')}</span>
             )}
             <h3>{item.title}</h3>
             {item.body && <ReactMarkdown>{item.body}</ReactMarkdown>}
@@ -118,8 +116,7 @@ function Block({ block }: { block: EditorialBlock }) {
 export function EditorialSections({ sections }: { sections: EditorialSection[] }) {
   const statements = sections.filter((section) => !section.blocks.length);
   const split = sections.filter((section) => section.blocks.length);
-  return sections.map((section, i) => {
-    const number = <span className="editorial-number">{String(i + 1).padStart(2, '0')}</span>;
+  return sections.map((section) => {
     const lead = section.lead && (
       <div className="prose">
         <ReactMarkdown>{section.lead}</ReactMarkdown>
@@ -132,7 +129,6 @@ export function EditorialSections({ sections }: { sections: EditorialSection[] }
           <Reveal
             className={`container statement${statements.indexOf(section) % 2 ? ' dark' : ''}`}
           >
-            {number}
             <h2>{section.title}</h2>
             {lead}
             {cta}
@@ -146,7 +142,6 @@ export function EditorialSections({ sections }: { sections: EditorialSection[] }
       >
         <div className="container editorial-grid">
           <Reveal as="header" className="editorial-head">
-            {number}
             <h2>{section.title}</h2>
             {lead}
           </Reveal>

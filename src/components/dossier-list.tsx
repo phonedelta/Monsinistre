@@ -7,11 +7,13 @@ export function DossierCards({
   dossiers,
   admin = false,
 }: {
-  dossiers: Dossier[];
+  dossiers: (Dossier & { user?: { fullName: string; phone: string } })[];
   admin?: boolean;
 }) {
   if (!dossiers.length)
-    return (
+    return admin ? (
+      <Empty title="Aucun dossier pour le moment" text="Les nouvelles demandes apparaîtront ici." />
+    ) : (
       <Empty
         title="Votre prochain dossier commence ici"
         text="Déposez une demande pour retrouver son avancement et vos échanges dans cet espace."
@@ -29,6 +31,11 @@ export function DossierCards({
           </div>
           <span className="eyebrow">{d.reference}</span>
           <h3>{typeLabels[d.type]}</h3>
+          {d.user && (
+            <p className="dossier-client">
+              {d.user.fullName} · {d.user.phone}
+            </p>
+          )}
           <p>
             {d.city}
             {d.businessName ? ` · ${d.businessName}` : ''}

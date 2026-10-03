@@ -4,15 +4,14 @@ import { z } from 'zod';
 import { currentUser, authorizedDossier, rateLimit } from '@/lib/auth';
 import { db } from '@/lib/db';
 import { storage } from '@/lib/storage';
-import { documentCategories } from '@/lib/constants';
+import { documentCategories, documentMaxSize as max, documentTypes } from '@/lib/constants';
 import { errorMessage } from '@/lib/errors';
+import { sameOrigin } from '@/lib/origin';
 export const runtime = 'nodejs';
-const max = 20 * 1024 * 1024;
 export async function POST(req: NextRequest) {
   const actor = await currentUser();
   if (!actor) return NextResponse.json({ error: 'Connexion requise.' }, { status: 401 });
-  if (req.headers.get('origin') !== new URL(process.env.APP_URL || req.url).origin)
-    return NextResponse.json({ error: 'Origine invalide.' }, { status: 403 });
+  if (!sameOrigin(req)) return NextResponse.json({ error: 'Origine invalide.' }, { status: 403 });
   try {
     await rateLimit('upload', actor.id, 30, 3600);
     // Bound streaming body before parsing: do not trust Content-Length alone.
@@ -44,17 +43,7 @@ export async function POST(req: NextRequest) {
       throw new Error('Fichier vide ou supérieur à 20 Mo.');
     const buffer = Buffer.from(await file.arrayBuffer());
     const type = await fileTypeFromBuffer(buffer);
-    if (
-      !type ||
-      ![
-        'image/jpeg',
-        'image/png',
-        'image/webp',
-        'application/pdf',
-        'video/mp4',
-        'video/quicktime',
-      ].includes(type.mime)
-    )
+    if (!type || !documentTypes.includes(type.mime))
       throw new Error('Format accepté : JPEG, PNG, WebP, PDF, MP4 ou MOV.');
     const key = await storage.put(buffer);
     try {

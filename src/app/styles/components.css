@@ -249,6 +249,25 @@
   background: var(--background);
   color: var(--text-muted);
 }
+/* Contact requests: a new one stands out, a converted one is settled, a closed one steps back. */
+.badge-contact-nouveau,
+.badge-reset-waiting {
+  background: var(--primary);
+  color: var(--navy);
+}
+.badge-contact-en_cours {
+  color: var(--navy);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.badge-contact-converti {
+  background: var(--navy);
+  color: var(--on-dark);
+}
+.badge-contact-ferme,
+.badge-reset-expired {
+  background: var(--background);
+  color: var(--text-muted);
+}
 
 /* Alerts */
 .alert {
@@ -387,6 +406,10 @@ input[type='file']::file-selector-button:hover {
   flex-direction: column;
   gap: var(--space-4);
 }
+/* A form made of its button only has nothing to space out above it. */
+.form-stack > fieldset:empty {
+  display: none;
+}
 .field-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
@@ -478,8 +501,231 @@ input[type='file']::file-selector-button:hover {
 .upload-zone input[type='file'] {
   margin-top: var(--space-2);
 }
+/* Adding a file to a dossier (components/documents.tsx): the file field covers the zone without
+   being seen, so a click or a file dropped anywhere on the zone reaches it. Once a file is
+   chosen the zone names it. */
+.upload-form .upload-zone {
+  position: relative;
+}
+.upload-form .upload-zone input[type='file'] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.upload-form .upload-zone:has(input:focus-visible) {
+  outline: 2px solid var(--primary-strong);
+  outline-offset: 2px;
+}
+.upload-form .upload-zone[data-chosen] {
+  border-style: solid;
+  background: var(--primary-soft);
+}
+.upload-form .upload-zone > span {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+/* On the dossier page the form takes one line: the kind of document, then the zone as a strip. */
+.add-document {
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border);
+}
+.panel .add-document h3 {
+  margin-bottom: var(--space-3);
+  font-size: var(--text-md);
+}
+.add-document .upload-form {
+  margin-top: 0;
+}
+.add-document .upload-form > fieldset {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+}
+.add-document .upload-zone {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-content: center;
+  gap: 0 var(--space-3);
+  padding: var(--space-2-5) var(--space-4);
+  border-radius: var(--radius-md);
+  text-align: left;
+}
+.add-document .upload-zone > svg {
+  grid-row: span 2;
+  align-self: center;
+}
+.add-document .upload-form .btn {
+  align-self: flex-end;
+}
+/* A form on one line: its field, then its button; what the server answers goes under them. */
+.inline-form {
+  flex-flow: row wrap;
+  align-items: flex-end;
+}
+.inline-form > fieldset {
+  flex: 1 1 14rem;
+}
+.inline-form > .alert {
+  order: 1;
+  flex-basis: 100%;
+  margin: 0;
+}
+/* Request form, documents step: one strip per chosen kind of document, then its files */
+.attachments {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  animation: rise var(--duration-slow) var(--ease-out) backwards;
+}
+.attachments > p {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.attachments > p strong {
+  display: block;
+  color: var(--navy);
+  font-size: var(--text-base);
+  font-weight: var(--weight-label);
+}
+.attachments > small {
+  font-size: var(--text-xs);
+}
+.attachment .upload-zone {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-1) var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  text-align: left;
+}
+.attachment .upload-zone > small {
+  color: var(--primary-text);
+  font-weight: var(--weight-label);
+}
+/* The file field itself is not shown: the whole strip opens it and carries its focus ring. */
+.attachment .upload-zone input[type='file'] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+.attachment .upload-zone:has(input:focus-visible) {
+  outline: 2px solid var(--primary-strong);
+  outline-offset: 2px;
+}
+.attachment ul {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1-5);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.attachment li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: var(--text-sm);
+}
+.attachment li > svg {
+  color: var(--primary-text);
+}
+.attachment li > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--navy);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.attachment li > small {
+  flex-shrink: 0;
+  font-size: var(--text-xs);
+}
+/* The documents asked from the client: those still awaited, those received and checked; the
+   team asks for another one under the list. */
 .document-requests {
-  margin-bottom: var(--space-4);
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  padding: var(--space-4) var(--space-5) var(--space-5);
+  border: 1px solid color-mix(in srgb, var(--primary) 24%, var(--border));
+  border-radius: var(--radius-lg);
+  background: var(--primary-tint);
+}
+.panel .document-requests h3 {
+  margin: 0;
+  font-size: var(--text-md);
+}
+.document-requests > p {
+  margin: 0;
+}
+.document-requests ul {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.document-requests li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-2-5) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+.document-requests li > div {
+  flex: 1;
+  min-width: 9rem;
+}
+.document-requests li strong {
+  display: block;
+  color: var(--navy);
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  overflow-wrap: anywhere;
+}
+.document-requests li small {
+  font-size: var(--text-xs);
+}
+.request-mark {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--radius-circle);
+  background: var(--primary-soft);
+  color: var(--primary-text);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.document-requests [data-done] .request-mark {
+  background: var(--primary);
+  color: var(--navy);
+  box-shadow: none;
+}
+/* The action inside a request stays secondary to the request itself. */
+.document-requests li .form-stack {
+  gap: 0;
+}
+.document-requests li .btn {
+  min-height: 2.25rem;
+  padding: var(--space-1-5) var(--space-4);
+  font-size: var(--text-sm);
 }
 .document-row {
   display: flex;
@@ -517,6 +763,44 @@ input[type='file']::file-selector-button:hover {
   font-size: var(--text-sm);
   margin-top: var(--space-2);
 }
+.document-actions .text-link {
+  font-size: inherit;
+}
+/* The files of a dossier on its page: what kind of file, its name and where it comes from, then
+   what can be done with it */
+.document-list {
+  display: grid;
+  gap: var(--space-2);
+}
+.document-list .document-row {
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    background var(--duration-base) var(--ease-out);
+}
+.document-list .document-row:hover {
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  background: var(--primary-tint);
+}
+.document-list .document-row > div:not(.document-actions) {
+  flex: 1 1 12rem;
+}
+.document-list .document-row strong {
+  display: block;
+  color: var(--navy);
+  line-height: var(--leading-normal);
+}
+.document-list .document-row small {
+  margin: var(--space-0-5) 0 0;
+  font-size: var(--text-xs);
+}
+.document-list .document-actions {
+  flex: none;
+  margin: 0;
+}
 
 /* Reference of a dossier, shown after a request */
 .reference-box {
@@ -527,6 +811,65 @@ input[type='file']::file-selector-button:hover {
   background: var(--primary-soft);
   padding: var(--space-3) var(--space-6);
   border-radius: var(--radius-md);
+}
+/* Copies the reference to the clipboard (components/copy-button.tsx) */
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.25rem;
+  padding: var(--space-1-5) var(--space-3-5);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--navy);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-label);
+  line-height: var(--leading-snug);
+  transition:
+    border-color var(--duration-base) var(--ease-out),
+    background var(--duration-base) var(--ease-out),
+    color var(--duration-base) var(--ease-out);
+}
+.copy-button svg {
+  color: var(--primary-text);
+}
+.copy-button:hover {
+  border-color: var(--primary);
+  background: var(--primary-tint);
+}
+.copy-button[data-status='copied'] {
+  border-color: var(--primary);
+  background: var(--primary-soft);
+  color: var(--primary-text);
+}
+/* Icon only, next to a reference in a heading; it says "Copié" once done. */
+.copy-button[data-compact] {
+  min-height: 1.75rem;
+  min-width: 1.75rem;
+  justify-content: center;
+  gap: var(--space-1-5);
+  padding: 0 var(--space-1-5);
+  border-color: transparent;
+  background: transparent;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  color: inherit;
+  vertical-align: middle;
+}
+.copy-button[data-compact]:hover,
+.copy-button[data-compact][data-status='copied'] {
+  background: var(--primary-soft);
+}
+.copy-button[data-compact] span:empty {
+  display: none;
+}
+/* A reference followed by its copy button sits on one centred line. */
+.eyebrow:has(.copy-button) {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
 }
 .account-info {
   display: flex;
@@ -545,19 +888,333 @@ input[type='file']::file-selector-button:hover {
   color: var(--navy);
 }
 
+/* Popups (components/modal.tsx): a native dialog, centred over a dimmed page */
+.modal {
+  width: min(31rem, 100% - 2 * var(--space-4));
+  max-height: calc(100dvh - 2 * var(--space-4));
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-lg);
+  overflow: auto;
+}
+.modal::backdrop {
+  background: color-mix(in srgb, var(--navy) 60%, transparent);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.modal[open] {
+  animation: pop-in var(--duration-slow) var(--ease-out);
+}
+.modal[open]::backdrop {
+  animation: fade-in var(--duration-base) var(--ease-out);
+}
+/* The page behind a popup does not scroll. */
+html:has(.modal[open]) {
+  overflow: hidden;
+}
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  padding: clamp(var(--space-6), 6vw, var(--space-10));
+  text-align: center;
+}
+.modal-body h2 {
+  font-size: var(--text-2xl);
+  letter-spacing: var(--tracking-snug);
+  line-height: var(--leading-snug);
+}
+.modal-body p {
+  margin: 0;
+}
+.modal-body label {
+  align-self: stretch;
+  text-align: left;
+}
+.modal-body > .alert {
+  align-self: stretch;
+  margin: 0;
+  text-align: left;
+}
+.modal-actions {
+  display: grid;
+  gap: var(--space-3);
+  align-self: stretch;
+  margin-top: var(--space-2);
+}
+.modal-icon {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: var(--radius-circle);
+  background: var(--primary-soft);
+  color: var(--primary-text);
+}
+.modal-reference {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: center;
+}
+.modal-reference small {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+/* A document in a wide popup: its name, the file at the size that fits, the download */
+.modal-wide {
+  width: min(60rem, 100% - 2 * var(--space-4));
+}
+.viewer {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 2 * var(--space-4));
+}
+.viewer header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-5) var(--space-4) var(--space-6);
+}
+.viewer h2 {
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+.viewer header p {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-sm);
+}
+.viewer figure {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  margin: 0;
+  padding: var(--space-3);
+  border-block: 1px solid var(--border);
+  background: var(--background);
+  overflow: hidden;
+}
+.viewer figure > * {
+  grid-area: 1 / 1;
+}
+.viewer img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100dvh - 16.5rem);
+  border-radius: var(--radius-xs);
+  object-fit: contain;
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+.viewer video {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100dvh - 16.5rem);
+  border-radius: var(--radius-xs);
+  background: var(--navy);
+}
+.viewer figure[data-status='loading'] :is(img, video) {
+  opacity: 0;
+}
+/* A PDF fills the popup (components/pdf-view.tsx): its pages scroll in a grey well, above the
+   page number and the zoom. */
+.viewer figure[data-kind='pdf'] {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+.viewer figure[data-kind='pdf'] > .spinner,
+.viewer figure[data-kind='pdf'] > p {
+  margin: auto;
+}
+.pdf-pages {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  padding: var(--space-3);
+  background: color-mix(in srgb, var(--navy) 10%, var(--background));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+.pdf-pages > div {
+  display: grid;
+  gap: var(--space-3);
+  margin-inline: auto;
+}
+.pdf-pages [data-page] {
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+.pdf-pages canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.pdf-tools {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-1-5) var(--space-4);
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--navy);
+  font-size: var(--text-sm);
+}
+.pdf-tools output {
+  min-width: 8.5rem;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.viewer figure .spinner {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--primary);
+}
+.viewer figure p {
+  max-width: 26rem;
+  margin: 0;
+  padding: var(--space-6);
+  text-align: center;
+}
+.viewer footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+}
+/* The success mark: a ring then a check that draw themselves, over a halo that fades out. */
+.success-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: var(--radius-circle);
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+}
+.success-mark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--primary);
+  opacity: 0;
+  animation: pulse-ring 1.2s var(--ease-out) 350ms;
+}
+.success-mark svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.success-mark circle {
+  animation: draw-line 600ms var(--ease-out) 150ms backwards;
+}
+.success-mark path {
+  animation: draw-line 400ms var(--ease-out) 650ms backwards;
+}
+/* In the confirmation popup: the documents being sent, then those that could not be */
+.upload-progress {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1-5);
+  align-self: stretch;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--navy);
+  font-size: var(--text-md);
+}
+.upload-progress strong {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2-5);
+  font-weight: var(--weight-label);
+}
+.upload-failures ul {
+  margin: var(--space-2) 0 var(--space-3);
+  padding-left: var(--space-5);
+  list-style: disc;
+  overflow-wrap: anywhere;
+}
+.upload-failures li small {
+  display: block;
+}
+.upload-failures p {
+  margin-top: var(--space-2);
+}
+/* The mark of a request being sent, inside a button. */
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+  border-top-color: currentColor;
+  border-radius: var(--radius-circle);
+  animation: spin 700ms linear infinite;
+}
+
 /* Loading */
 .loading-bar {
+  width: 10rem;
   height: 3px;
-  width: 7.5rem;
-  border-radius: var(--radius-pill);
-  background: var(--primary);
   margin-bottom: var(--space-5);
+  border-radius: var(--radius-pill);
+  background: var(--primary-soft);
+  overflow: hidden;
+}
+.loading-bar::after {
+  content: '';
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  animation: loading-slide 1.2s var(--ease-in-out) infinite;
 }
 
 /* Fields below 16px make iOS zoom the page on focus. */
 @media (max-width: 600px) {
   .choices {
     grid-template-columns: minmax(0, 1fr);
+  }
+  /* The action of a strip goes under its name. */
+  .attachment .upload-zone {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  /* On the dossier page, the kind of document goes above the zone, the actions of a file under
+     its name. */
+  .add-document .upload-form > fieldset {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .add-document .upload-form .btn,
+  .inline-form > .btn {
+    align-self: stretch;
+    flex-basis: 100%;
+  }
+  .document-list .document-actions {
+    flex-basis: 100%;
+    padding-top: var(--space-2-5);
+    border-top: 1px solid var(--border);
+  }
+  .document-list .document-actions > span {
+    margin-left: auto;
+  }
+  .attachment .upload-zone > small {
+    grid-column: 2;
   }
   input:not([type='checkbox']):not([type='radio']):not([type='file']),
   select,

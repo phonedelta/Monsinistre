@@ -4,6 +4,7 @@ import { dossierScope, type Actor } from '@/lib/auth';
 import { statusLabels, typeLabels, date } from '@/lib/constants';
 import { Badge, Empty, PageHeading } from './ui';
 import Link from 'next/link';
+import { ChevronDown, SlidersHorizontal } from 'lucide-react';
 export type Search = Record<string, string | string[] | undefined>;
 export async function AdminDossiers({ actor, search }: { actor: Actor; search: Search }) {
   const str = (key: string) =>
@@ -62,6 +63,10 @@ export async function AdminDossiers({ actor, search }: { actor: Actor; search: S
       select: { id: true, fullName: true },
     }),
   ]);
+  // Filters other than the search: on small screens they fold behind a switch.
+  const refined =
+    [type, status, city, assignedTo, from, to].filter(Boolean).length +
+    (sort && sort !== 'recent' ? 1 : 0);
   const pageLink = (p: number) => {
     const query = new URLSearchParams();
     Object.entries(search).forEach(([k, v]) => {
@@ -82,62 +87,72 @@ export async function AdminDossiers({ actor, search }: { actor: Actor; search: S
           Rechercher
           <input name="q" defaultValue={q} placeholder="Référence, client, téléphone, commerce…" />
         </label>
-        <label>
-          Service
-          <select name="type" defaultValue={type}>
-            <option value="">Tous les services</option>
-            {Object.entries(typeLabels).map(([k, v]) => (
-              <option value={k} key={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Statut
-          <select name="status" defaultValue={status}>
-            <option value="">Tous les statuts</option>
-            {Object.entries(statusLabels).map(([k, v]) => (
-              <option value={k} key={k}>
-                {v}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Ville
-          <input name="city" defaultValue={city} placeholder="Toutes les villes" />
-        </label>
-        {actor.role === 'ADMIN' && (
+        <div className="filters-switch">
+          <input type="checkbox" id="more-filters" defaultChecked={refined > 0} />
+          <label htmlFor="more-filters">
+            <SlidersHorizontal size={16} />
+            Filtres{refined > 0 && ` (${refined})`}
+            <ChevronDown size={16} />
+          </label>
+        </div>
+        <div className="filters-extra">
           <label>
-            Responsable
-            <select name="assignedTo" defaultValue={assignedTo}>
-              <option value="">Tous</option>
-              <option value="none">Non assigné</option>
-              {staff.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.fullName}
+            Service
+            <select name="type" defaultValue={type}>
+              <option value="">Tous les services</option>
+              {Object.entries(typeLabels).map(([k, v]) => (
+                <option value={k} key={k}>
+                  {v}
                 </option>
               ))}
             </select>
           </label>
-        )}
-        <label>
-          Du
-          <input name="from" type="date" defaultValue={from} />
-        </label>
-        <label>
-          Au
-          <input name="to" type="date" defaultValue={to} />
-        </label>
-        <label>
-          Trier par
-          <select name="sort" defaultValue={sort}>
-            <option value="recent">Dernière mise à jour</option>
-            <option value="oldest">Plus anciens</option>
-            <option value="reference">Référence</option>
-          </select>
-        </label>
+          <label>
+            Statut
+            <select name="status" defaultValue={status}>
+              <option value="">Tous les statuts</option>
+              {Object.entries(statusLabels).map(([k, v]) => (
+                <option value={k} key={k}>
+                  {v}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Ville
+            <input name="city" defaultValue={city} placeholder="Toutes les villes" />
+          </label>
+          {actor.role === 'ADMIN' && (
+            <label>
+              Responsable
+              <select name="assignedTo" defaultValue={assignedTo}>
+                <option value="">Tous</option>
+                <option value="none">Non assigné</option>
+                {staff.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.fullName}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
+          <label>
+            Du
+            <input name="from" type="date" defaultValue={from} />
+          </label>
+          <label>
+            Au
+            <input name="to" type="date" defaultValue={to} />
+          </label>
+          <label>
+            Trier par
+            <select name="sort" defaultValue={sort}>
+              <option value="recent">Dernière mise à jour</option>
+              <option value="oldest">Plus anciens</option>
+              <option value="reference">Référence</option>
+            </select>
+          </label>
+        </div>
         <div className="filter-actions">
           <button className="btn">Appliquer</button>
           <Link href="/admin/dossiers">Réinitialiser</Link>

@@ -27,6 +27,9 @@
   --line: color-mix(in srgb, var(--navy) 82%, transparent); /* illustration strokes */
   --line-soft: color-mix(in srgb, var(--navy) 26%, transparent);
   --heading-color: var(--navy);
+
+  /* The one color outside the brand palette: the red of a count that waits for someone. */
+  --alert: #e03131;
 }
 
 /* Remove unrelated default color utilities; expose this identity to Tailwind. */

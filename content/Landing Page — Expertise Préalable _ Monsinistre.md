@@ -16,41 +16,35 @@ Demander mon expertise préalable
 
 # **SECTION 2** 
 
-## **Vos biens ont de la valeur. Mais pouvez-vous la justifier précisément ?**
+## Pourquoi une expertise avant d’assurer ?
 
 ### **Sous-titre**
 
-Lorsqu’il s’agit d’assurer des biens précieux, une estimation approximative peut créer un écart entre la valeur réelle de votre patrimoine et la couverture prévue.
+Un bijou ou un tableau assuré sur une simple estimation peut être mal couvert.
 
-### **01 — Une valeur mal connue**
+### **Une valeur mal connue**
 
-Vous connaissez la valeur sentimentale ou le prix d’achat de vos biens, mais pas nécessairement leur **valeur actuelle documentée**.
+Le prix d’achat ou la valeur sentimentale ne disent pas ce que vaut le bien aujourd’hui.
 
-### **02 — Une couverture plafonnée**
+### **Des plafonds de garantie**
 
-Votre contrat peut prévoir des **limites spécifiques** pour les bijoux, tableaux et autres objets de valeur.
+Votre contrat peut prévoir des limites pour les bijoux, les tableaux et les objets de valeur.
 
-### **03 — Des biens difficiles à valoriser**
+### **Des biens difficiles à estimer**
 
-Une œuvre d’art, un bijou ou une pièce particulière ne peut pas toujours être évalué comme un bien ordinaire.
+Une œuvre ou une pièce rare ne s’évalue pas comme un bien courant.
 
-### **04 — Le problème découvert trop tard**
+### **Un problème découvert trop tard**
 
-Sans évaluation préalable, certaines questions sur la valeur des biens peuvent n’apparaître qu’au moment où vous avez réellement besoin de votre assurance.
+Sans expertise, la question de la valeur se pose au moment où vous avez besoin de votre assurance.
 
 # **SECTION 3** 
 
-## L’expertise préalable : connaître avant d’assurer
+## L’expertise préalable
 
 ### **Sous-titre**
 
-Monsinistre vous permet de disposer d’une vision claire et documentée de la valeur de vos biens avant la souscription de votre assurance.
-
-### 
-
-L’expertise préalable consiste à identifier, examiner, évaluer et documenter les biens de valeur que vous souhaitez assurer.
-
-Selon la nature des biens concernés, cette démarche permet de constituer une base technique claire sur leur valeur avant d’échanger avec votre assureur sur les conditions de couverture.
+Nous identifions, examinons et évaluons les biens que vous voulez assurer. Vous disposez ensuite d’éléments documentés pour discuter de la couverture avec votre assureur.
 
 ### **CTA**
 
@@ -58,123 +52,39 @@ Faire évaluer mes biens
 
 # **SECTION 4** 
 
-## **Quels biens sont concernés ?**
+## Les biens concernés
 
-### **Sous-titre**
-
-Une expertise adaptée aux biens dont la valeur mérite d’être précisément établie.
-
-**Bijoux & pièces précieuses**  
-Bijoux, montres et autres pièces de valeur.
+**Bijoux & montres**  
+Bijoux, montres et pièces précieuses.
 
 **Tableaux**  
- Œuvres picturales et collections nécessitant une évaluation spécifique.
+ Œuvres picturales et collections.
 
 **Œuvres d’art**  
  Pièces artistiques dont la valeur dépend de plusieurs critères.
 
-**Objets & biens de valeur**  
- Autres biens particuliers nécessitant une identification et une valorisation professionnelle.
-
-# **SECTION 5** 
-
-## **Ce que l’expertise préalable change pour vous**
-
-### **01 — Connaître**
-
-**Vous connaissez la valeur de ce que vous possédez.**
-
-Plus besoin de vous baser uniquement sur une estimation approximative.
-
-### **02 — Documenter**
-
-**Vous disposez d’éléments précis sur vos biens.**
-
-L’évaluation permet de constituer une base documentée avant l’assurance.
-
-### **03 — Mieux échanger**
-
-**Vous abordez votre assurance avec des informations concrètes.**
-
-Vous connaissez la valeur des biens que vous souhaitez couvrir avant de discuter des garanties et plafonds.
-
-### **04 — Anticiper**
-
-**Vous évitez de découvrir trop tard un écart de valeur.**
-
-L’objectif est de clarifier la situation avant qu’un problème ne survienne.
-
-### **CTA**
-
-Faire évaluer mes biens
-
-# **SECTION 6**
-
-## **Cette expertise est-elle faite pour vous ?**
-
-### **Sous-titre**
-
-Elle s’adresse particulièrement aux propriétaires disposant d’un patrimoine mobilier de valeur.
-
-**Propriétaires de villas**  
- Vous souhaitez assurer votre villa et les biens précieux qu’elle contient.
-
-**Collectionneurs**  
- Vous possédez plusieurs tableaux, œuvres ou objets de collection.
-
-**Propriétaires de bijoux**  
- Vous souhaitez connaître et documenter leur valeur avant l’assurance.
-
-**Détenteurs d’œuvres d’art**  
- Vous souhaitez disposer d’une évaluation professionnelle de votre patrimoine artistique.
-
-### **CTA**
-
-Faire évaluer mes biens
+**Autres objets de valeur**  
+ Objets de collection et pièces particulières.
 
 # **SECTION 7** 
 
-## **Une démarche simple avant votre assurance**
+## Comment se déroule l’expertise
 
 ### **Étape 1 — Votre demande**
 
-Vous nous indiquez les biens que vous souhaitez faire expertiser.
+Vous indiquez les biens à faire expertiser.
 
 ### **Étape 2 — Identification**
 
-Nous recueillons les informations et éléments nécessaires à leur étude.
+Nous recueillons les informations et les documents nécessaires.
 
 ### **Étape 3 — Expertise**
 
-Les biens concernés font l’objet d’une analyse et d’une évaluation adaptées à leur nature.
+Chaque bien est examiné et évalué selon sa nature.
 
 ### **Étape 4 — Documentation**
 
-Vous disposez des éléments issus de l’expertise pour connaître la valeur de votre patrimoine avant l’assurance.
-
-# **SECTION 9** 
-
-## **Pourquoi confier votre expertise préalable à Monsinistre ?**
-
-### **Sous-titre**
-
-Parce qu’un bien précieux mérite mieux qu’une estimation approximative.
-
-**Une approche technique**  
- Chaque bien est étudié selon sa nature et ses caractéristiques.
-
-**Une évaluation avant l’assurance**  
- L’intervention se fait au bon moment : avant de définir votre couverture.
-
-**Une valeur documentée**  
- L’objectif est de transformer une valeur supposée en une valeur établie sur des éléments concrets.
-
-**Une expertise adaptée à votre patrimoine**  
- Bijoux, tableaux, œuvres d’art et autres biens de valeur nécessitent des approches différentes.
-
-### **CTA**
-
-Faire évaluer mes biens
+Vous disposez des résultats pour discuter de votre couverture.
 
 # **SECTION 10**
 

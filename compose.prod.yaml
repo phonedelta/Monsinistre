@@ -39,10 +39,6 @@ services:
     build:
       context: .
       target: app
-      args:
-        CONTACT_PHONE: ${CONTACT_PHONE:-}
-        CONTACT_WHATSAPP: ${CONTACT_WHATSAPP:-}
-        CONTACT_EMAIL: ${CONTACT_EMAIL:-}
     restart: unless-stopped
     logging: *logging
     environment:
@@ -52,6 +48,7 @@ services:
       # The application port is not published: every request comes through Caddy,
       # which discards any X-Forwarded-For sent by the client and sets the real address.
       TRUST_PROXY: 'true'
+      # Starting values of the public contact details; the administration settings override them.
       CONTACT_PHONE: ${CONTACT_PHONE:-}
       CONTACT_WHATSAPP: ${CONTACT_WHATSAPP:-}
       CONTACT_EMAIL: ${CONTACT_EMAIL:-}
@@ -95,6 +92,7 @@ services:
     environment:
       DATABASE_URL: *database-url
       ADMIN_PHONE: ${ADMIN_PHONE:-}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:-}
       ADMIN_NAME: ${ADMIN_NAME:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
       STAFF_PHONE: ${STAFF_PHONE:-}

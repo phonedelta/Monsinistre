@@ -6,11 +6,13 @@ export function ActionForm({
   children,
   label = 'Enregistrer',
   className = '',
+  secondary = false,
 }: {
   action: (state: ActionResult, form: FormData) => Promise<ActionResult>;
   children: React.ReactNode;
   label?: string;
   className?: string;
+  secondary?: boolean;
 }) {
   const [state, submit, pending] = useActionState(action, {});
   return (
@@ -32,7 +34,7 @@ export function ActionForm({
           <input aria-label="Lien de réinitialisation" readOnly value={state.resetLink} />
         </div>
       )}
-      <button className="btn" disabled={pending} type="submit">
+      <button className={secondary ? 'btn btn-secondary' : 'btn'} disabled={pending} type="submit">
         {pending ? 'Enregistrement…' : label}
       </button>
     </form>

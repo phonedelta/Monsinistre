@@ -38,7 +38,7 @@ export async function AdminClients({ id, q = '' }: { id?: string; q?: string }) 
             {client.city}
           </p>
         </section>
-        <h2 style={{ marginTop: 'var(--space-6)' }}>Dossiers et historique</h2>
+        <h2 className="section-title">Dossiers et historique</h2>
         <DossierCards dossiers={client.dossiers} admin />
         <section className="panel" style={{ marginTop: 'var(--space-6)' }}>
           <h2>Historique des statuts</h2>

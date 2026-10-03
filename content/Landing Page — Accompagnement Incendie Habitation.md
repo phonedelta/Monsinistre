@@ -16,178 +16,95 @@ Faire analyser mon dossier incendie
 
 # **SECTION 2** 
 
-## Après l’incendie, une deuxième épreuve commence
+## Ce que l’on découvre après l’incendie
 
 ### **Sous-titre**
 
-Évaluer les pertes, constituer le dossier et échanger avec l’assurance peut rapidement devenir complexe.
+Une fois le feu éteint, il faut évaluer les pertes et répondre à l’assurance, souvent dans l’urgence.
 
-### **Des dommages peuvent être sous-évalués**
+### **Des dommages qui ne se voient pas**
 
-L’incendie ne détériore pas uniquement ce qui a brûlé. La chaleur, la fumée et parfois l’eau utilisée lors de l’extinction peuvent également provoquer des dommages.
+La fumée, la chaleur et l’eau des pompiers abîment aussi les pièces qui n’ont pas brûlé.
 
-### **Certaines pertes sont difficiles à identifier**
+### **Une évaluation qui paraît faible**
 
-Mobilier, équipements, installations électriques, murs, plafonds… certains dommages nécessitent une analyse plus approfondie.
+L’offre de l’assurance ne correspond pas toujours à ce que vous avez réellement perdu.
 
-### **L’évaluation proposée peut sembler insuffisante**
+### **Des démarches à mener vite**
 
-Vous pouvez constater un écart entre les pertes que vous avez réellement subies et l’évaluation retenue dans votre dossier.
-
-### **Vous devez prendre des décisions rapidement**
-
-Documents, déclarations, évaluations, échanges avec l’assurance… alors que votre priorité est déjà de gérer les conséquences de l’incendie.
+Déclaration, justificatifs, rendez-vous d’expertise : tout arrive en même temps.
 
 # **SECTION 3** 
 
-## Votre situation ressemble à celle-ci ?
+## Cet accompagnement est fait pour vous si…
 
-* Votre maison ou appartement a subi un incendie.  
-* Votre habitation était assurée au moment du sinistre.  
-* Votre dossier est toujours en cours.  
-* Et votre compagnie d’assurance n’a pas encore rendu de décision définitive.
-
-### **CTA**
-
-Oui, je souhaite faire examiner mon dossier
-
-# **SECTION 4** 
-
-## **Vous gérez les conséquences de l’incendie. Nous renforçons votre dossier.**
-
-### **Sous-titre**
-
-Monsinistre intervient sur l’aspect technique du sinistre pour identifier, documenter et évaluer les dommages liés à l’incendie.
-
-Notre accompagnement vise à construire une vision précise des pertes réellement subies et à disposer d’un dossier technique solide dans les échanges avec votre compagnie d’assurance.
+* Vous êtes propriétaire, copropriétaire ou occupant d’un logement touché par un incendie.  
+* Le logement était assuré au moment du sinistre.  
+* Le sinistre est déclaré et votre dossier est toujours en cours.  
+* L’assurance n’a pas encore rendu de décision définitive.
 
 ### **CTA**
 
-**Demander une prise en charge**
+Faire examiner mon dossier
 
 # **SECTION 5**
 
-## **Concrètement, que faisons-nous pour votre dossier ?**
+## Ce que nous faisons
+
+### **Sous-titre**
+
+Nous intervenons sur la partie technique du sinistre, du premier examen jusqu’aux échanges avec l’assurance.
 
 ### **01 — Analyse du dossier**
 
-Nous étudions les informations disponibles, les documents et les premières évaluations liées au sinistre.
+Nous lisons la déclaration, les échanges et les évaluations déjà faites.
 
-### **02 — Expertise des dommages**
+### **02 — Examen des dommages**
 
-Nous examinons les différents dommages causés par l’incendie et ses conséquences.
+Nous relevons les dégâts causés par le feu, la fumée, la chaleur et l’eau.
 
 ### **03 — Évaluation des pertes**
 
-Nous évaluons les éléments concernés afin d’obtenir une vision plus complète des pertes.
+Nous évaluons les biens et les travaux concernés.
 
-### **04 — Constitution technique du dossier**
+### **04 — Dossier technique**
 
-Les dommages et éléments pertinents sont documentés et structurés pour renforcer le dossier.
+Les dommages sont documentés et classés dans un dossier à présenter à l’assurance.
 
-### **05 — Accompagnement avec l’assurance**
+### **05 — Suivi avec l’assurance**
 
-Monsinistre vous accompagne dans le suivi technique du dossier et les échanges liés à l’évaluation des dommages.
+Nous vous accompagnons dans les échanges sur l’évaluation des dommages.
 
 # **SECTION 6** 
 
-## Le feu n’est pas la seule source de dommages
-
-### **Sous-titre**
-
-Une expertise incendie doit regarder au-delà de ce qui est immédiatement visible.
+## Le feu n’est pas la seule cause de dommages
 
 **🔥 Le feu**  
- Mobilier, équipements, revêtements et éléments directement touchés.
+ Mobilier, équipements et revêtements touchés par les flammes.
 
 **🌫️ La fumée**  
- Elle peut atteindre des pièces et des biens qui n’ont jamais été directement exposés aux flammes.
+ Elle atteint des pièces que le feu n’a pas touchées.
 
 **🌡️ La chaleur**  
- Certains équipements et installations peuvent être altérés sans présenter immédiatement de traces évidentes.
+ Elle peut altérer des équipements sans laisser de trace visible.
 
-**💧 L’extinction**  
- L’eau utilisée pour maîtriser l’incendie peut également provoquer des dommages supplémentaires.
+**💧 L’eau d’extinction**  
+ Plafonds, sols et étages inférieurs peuvent être abîmés.
 
-**⚡ Les installations**  
- Les réseaux et équipements électriques peuvent nécessiter une analyse spécifique après le sinistre.
-
-# **SECTION 7** 
-
-## Un incendie. Deux façons de gérer le dossier.
-
-### **Sans analyse approfondie**
-
-Dommages visibles principalement pris en compte  
- → Pertes difficiles à identifier  
- → Doutes sur l’évaluation  
- → Assuré seul face à un dossier technique
-
-### **Avec Monsinistre**
-
-Analyse des différentes conséquences du sinistre  
- → Évaluation technique des dommages  
- → Pertes documentées  
- → Dossier structuré  
- → Accompagnement dans le processus d’indemnisation
-
-### **CTA**
-
-**Renforcer mon dossier incendie**
-
-# **SECTION 8** 
-
-## Cet accompagnement est-il adapté à votre situation ?
-
-### **Propriétaires**
-
-Votre maison ou villa assurée a subi un incendie.
-
-### **Copropriétaires**
-
-Votre appartement ou une partie de votre logement a été touché.
-
-### **Occupants d’un logement assuré**
-
-Vous disposez d’un dossier d’assurance lié à un incendie dans votre habitation.
-
-### **Condition essentielle**
-
-**Le dossier doit encore être en cours et ne pas avoir fait l’objet d’une décision définitive de la compagnie d’assurance.**
+**⚡ L’électricité**  
+ Le réseau et les appareils peuvent nécessiter un contrôle après le sinistre.
 
 # **SECTION 9** 
 
-## **Une fois le dossier clôturé, vos options peuvent devenir plus limitées**
+## N’attendez pas la décision de l’assurance
 
 ### **Sous-titre**
 
-Le meilleur moment pour examiner les dommages et renforcer techniquement votre dossier est lorsqu’il est encore en cours.
-
-Plus tôt les dommages sont identifiés et documentés, plus il est possible de disposer d’éléments précis dans le traitement du dossier.
+Une fois le dossier clôturé, il devient difficile de faire reconnaître des dommages oubliés. C’est pendant qu’il est en cours que notre examen est le plus utile.
 
 ### **CTA**
 
 **Mon dossier est encore en cours**
-
-# **SECTION 10** 
-
-## **Après un incendie, chaque détail compte**
-
-### **Une approche technique**
-
-Nous ne nous limitons pas à ce qui est immédiatement visible.
-
-### **Une évaluation structurée**
-
-Les dommages sont analysés et documentés de manière méthodique.
-
-### **Un accompagnement du dossier**
-
-Vous n’avez pas à gérer seul les aspects techniques liés au sinistre.
-
-### **Une mission claire**
-
-**Faire en sorte que les dommages réellement subis soient correctement identifiés, évalués et défendus dans votre dossier.**
 
 # **SECTION 11** 
 

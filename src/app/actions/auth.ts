@@ -12,32 +12,76 @@ import {
   digest,
   requireUser,
 } from '@/lib/auth';
-import { phoneSchema, passwordSchema } from '@/lib/forms';
+import { phoneSchema, passwordSchema, loginIdentifier } from '@/lib/forms';
 import { errorMessage, type ActionResult } from '@/lib/errors';
+const secret = z.string().min(1).max(128);
+// The comparison runs even when no account matches, so the answer takes as long either way.
+async function passwordMatches(user: { passwordHash: string } | null, password: string) {
+  const valid = await compare(
+    password,
+    user?.passwordHash || '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxwmFYYPqIuGCQjyOC1nIGUGnUG',
+  );
+  return !!user && valid;
+}
+/* Clients and the team sign in on separate pages, and each page only opens its own kind of
+   account. This is the client page, "Suivre mon dossier" (/connexion): the phone number given
+   with the request. A team account gets the same answer as a wrong password. */
 export async function login(_: ActionResult, form: FormData): Promise<ActionResult> {
-  let destination = '/mon-espace';
   try {
     const input = z
-      .object({ phone: phoneSchema, password: z.string().min(1).max(128) })
+      .object({ phone: phoneSchema, password: secret })
       .parse(Object.fromEntries(form));
     await rateLimit('login-phone', input.phone);
     await rateLimit('login-ip', await clientIp(), 60);
     const user = await db.user.findUnique({ where: { phone: input.phone } });
-    const valid = await compare(
-      input.password,
-      user?.passwordHash || '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxwmFYYPqIuGCQjyOC1nIGUGnUG',
-    );
-    if (!user || !valid) return { error: 'Téléphone ou mot de passe incorrect.' };
+    if (!(await passwordMatches(user, input.password)) || user?.role !== 'CLIENT')
+      return { error: 'Téléphone ou mot de passe incorrect.' };
     await createSession(user.id);
-    destination = user.role === 'CLIENT' ? '/mon-espace' : '/admin/dashboard';
   } catch (e) {
     return { error: errorMessage(e) };
   }
-  redirect(destination);
+  redirect('/mon-espace');
 }
+/* The team page (/admin/connexion): a username, or the phone number of the account. A client
+   account gets the same answer as a wrong password. */
+export async function staffLogin(_: ActionResult, form: FormData): Promise<ActionResult> {
+  try {
+    const input = z
+      .object({ identifier: z.string().min(1).max(64), password: secret })
+      .parse(Object.fromEntries(form));
+    const identifier = loginIdentifier(input.identifier);
+    const ip = await clientIp();
+    if ('username' in identifier) {
+      // A team username can be guessed (it may be the brand name): attempts are counted per
+      // address, so a stranger failing on it cannot lock the real owner out. The wider total
+      // still bounds guessing from many addresses.
+      const name = identifier.username.toLowerCase();
+      await rateLimit('login-user', `${name}|${ip}`);
+      await rateLimit('login-user-all', name, 200);
+    } else await rateLimit('login-phone', identifier.phone);
+    await rateLimit('login-ip', ip, 60);
+    const user =
+      'username' in identifier
+        ? await db.user.findFirst({
+            where: { username: { equals: identifier.username, mode: 'insensitive' } },
+          })
+        : await db.user.findUnique({ where: { phone: identifier.phone } });
+    if (!(await passwordMatches(user, input.password)) || !user || user.role === 'CLIENT')
+      return { error: 'Identifiant ou mot de passe incorrect.' };
+    await createSession(user.id);
+  } catch (e) {
+    return { error: errorMessage(e) };
+  }
+  redirect('/admin/dashboard');
+}
+// Signing out leads back to the sign-in page of the space it was asked from.
 export async function logout() {
   await destroySession();
   redirect('/connexion');
+}
+export async function staffLogout() {
+  await destroySession();
+  redirect('/admin/connexion');
 }
 export async function requestReset(_: ActionResult, form: FormData): Promise<ActionResult> {
   try {

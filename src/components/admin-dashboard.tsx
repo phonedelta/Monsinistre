@@ -1,7 +1,19 @@
 import { db } from '@/lib/db';
 import { dossierScope, type Actor } from '@/lib/auth';
 import { statusLabels, typeLabels } from '@/lib/constants';
-import { PageHeading } from './ui';
+import Link from 'next/link';
+import {
+  ArrowRight,
+  CircleCheck,
+  FileWarning,
+  FolderOpen,
+  FolderPlus,
+  Inbox,
+  Layers,
+  SearchCheck,
+  UsersRound,
+} from 'lucide-react';
+import { AdminVisual } from './visuals';
 import { DossierCards } from './dossier-list';
 export async function AdminDashboard({ actor }: { actor: Actor }) {
   const where = dossierScope(actor);
@@ -21,12 +33,18 @@ export async function AdminDashboard({ actor }: { actor: Actor }) {
   ] = await Promise.all([
     db.dossier.count({ where }),
     db.dossier.count({ where: { ...where, status: { notIn: ['TERMINE', 'ANNULE', 'ARCHIVE'] } } }),
+    // The same count as the red one of the menu: the dossiers in status « Nouveau ».
     db.dossier.count({ where: { ...where, status: 'NOUVEAU' } }),
     db.dossier.count({ where: { ...where, status: 'DOCUMENTS_REQUIS' } }),
     db.dossier.count({ where: { ...where, status: 'EXPERTISE_EN_COURS' } }),
     db.dossier.count({ where: { ...where, status: 'TERMINE' } }),
     actor.role === 'ADMIN' ? db.user.count({ where: { role: 'CLIENT' } }) : Promise.resolve(0),
-    db.dossier.findMany({ where, orderBy: { createdAt: 'desc' }, take: 6 }),
+    db.dossier.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: 6,
+      include: { user: { select: { fullName: true, phone: true } } },
+    }),
     db.dossier.groupBy({ by: ['type'], where, _count: true }),
     db.dossier.groupBy({ by: ['status'], where, _count: true }),
     db.dossier.groupBy({
@@ -62,31 +80,50 @@ export async function AdminDashboard({ actor }: { actor: Actor }) {
   );
   return (
     <>
-      <PageHeading
-        eyebrow="TABLEAU DE BORD"
-        title="Vue d’ensemble"
-        text={
-          actor.role === 'EXPERT'
-            ? 'Le suivi des dossiers qui vous sont assignés.'
-            : 'Pilotez l’activité et gardez une vision claire de chaque dossier.'
-        }
-      />
+      <section className="dash-hero">
+        <div>
+          <span className="eyebrow">TABLEAU DE BORD</span>
+          <h1>Bonjour, {actor.fullName.split(' ')[0]}</h1>
+          <p>
+            {actor.role === 'EXPERT'
+              ? 'Le suivi des dossiers qui vous sont assignés.'
+              : 'Pilotez l’activité et gardez une vision claire de chaque dossier.'}
+          </p>
+          <div className="dash-hero-facts">
+            <span>
+              <strong>{newCount}</strong> {newCount > 1 ? 'nouveaux dossiers' : 'nouveau dossier'}
+            </span>
+            <span>
+              <strong>{active}</strong> {active > 1 ? 'dossiers actifs' : 'dossier actif'}
+            </span>
+            <Link href="/admin/dossiers" className="btn">
+              Voir les dossiers <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+        <AdminVisual compact />
+      </section>
       <div className="stats-grid">
-        {[
-          ['Nouveaux dossiers', newCount],
-          ['Dossiers actifs', active],
-          ['Documents requis', docs],
-          ['Expertises en cours', expertise],
-          ['Terminés', complete],
-          ...(actor.role === 'ADMIN'
-            ? [
-                ['Clients', clients],
-                ['Nouveaux contacts', contacts],
-              ]
-            : []),
-          ['Total dossiers', total],
-        ].map(([label, count]) => (
-          <div className="stat-card" key={String(label)}>
+        {(
+          [
+            ['Nouveaux dossiers', newCount, FolderPlus],
+            ['Dossiers actifs', active, FolderOpen],
+            ['Documents requis', docs, FileWarning],
+            ['Expertises en cours', expertise, SearchCheck],
+            ['Terminés', complete, CircleCheck],
+            ...(actor.role === 'ADMIN'
+              ? ([
+                  ['Clients', clients, UsersRound],
+                  ['Nouveaux contacts', contacts, Inbox],
+                ] as const)
+              : []),
+            ['Total dossiers', total, Layers],
+          ] as const
+        ).map(([label, count, Icon]) => (
+          <div className="stat-card" key={label}>
+            <i>
+              <Icon size={18} strokeWidth={1.75} />
+            </i>
             <span>{label}</span>
             <strong>{count}</strong>
           </div>

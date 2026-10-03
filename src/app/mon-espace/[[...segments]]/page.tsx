@@ -5,6 +5,7 @@ import { PageHeading, ButtonLink } from '@/components/ui';
 import { DossierCards } from '@/components/dossier-list';
 import { DossierDetail } from '@/components/dossier-detail';
 import { PortalDocuments } from '@/components/portal-documents';
+import { AwaitedDocuments } from '@/components/awaited-documents';
 import { ActionForm } from '@/components/action-form';
 import { updateProfile } from '@/app/actions/dossiers';
 import { terminalStatuses, date, statusLabels } from '@/lib/constants';
@@ -14,14 +15,21 @@ export default async function ClientPage({ params }: { params: Promise<{ segment
   if (segments[0] === 'dossiers' && segments.length === 2)
     return <DossierDetail actor={user} reference={segments[1]} />;
   if (segments.length > 1) notFound();
-  if (segments[0] === 'documents') return <PortalDocuments actor={user} />;
+  if (segments[0] === 'documents')
+    return (
+      <>
+        <AwaitedDocuments actor={user} />
+        <PortalDocuments actor={user} />
+      </>
+    );
   if (segments[0] === 'profil')
     return (
       <>
+        <AwaitedDocuments actor={user} />
         <PageHeading title="Mon profil" text="Vos coordonnées pour rester en contact." />
         <section className="panel narrow">
           <p>
-            Identifiant de connexion : <strong>{user.phone}</strong>
+            Identifiant de connexion&nbsp;: <strong>{user.phone}</strong>
           </p>
           <ActionForm action={updateProfile}>
             <label>
@@ -57,6 +65,7 @@ export default async function ClientPage({ params }: { params: Promise<{ segment
   if (segments[0] === 'dossiers')
     return (
       <>
+        <AwaitedDocuments actor={user} />
         <PageHeading eyebrow="VOTRE SUIVI" title="Mes dossiers">
           <ButtonLink href="/services">Nouveau dossier</ButtonLink>
         </PageHeading>
@@ -64,7 +73,13 @@ export default async function ClientPage({ params }: { params: Promise<{ segment
       </>
     );
   const [requests, history] = await Promise.all([
-    db.documentRequest.count({ where: { dossier: { userId: user.id }, fulfilledAt: null } }),
+    // As in the notice above: what is awaited in the dossiers that are not closed.
+    db.documentRequest.count({
+      where: {
+        dossier: { userId: user.id, status: { notIn: [...terminalStatuses] } },
+        fulfilledAt: null,
+      },
+    }),
     db.dossierStatusHistory.findMany({
       where: { dossier: { userId: user.id } },
       include: { dossier: { select: { reference: true } } },
@@ -74,6 +89,7 @@ export default async function ClientPage({ params }: { params: Promise<{ segment
   ]);
   return (
     <>
+      <AwaitedDocuments actor={user} />
       <PageHeading
         eyebrow="VOTRE ESPACE PERSONNEL"
         title={`Bonjour ${user.fullName.split(' ')[0]}`}
